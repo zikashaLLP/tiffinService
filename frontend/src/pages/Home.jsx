@@ -103,7 +103,7 @@ const Home = () => {
         {menus.map(
           (menu) =>
             ((isLunch && menu.shift === "Lunch") ||
-              (!isLunch && menu.shift === "Dinner")) ? (
+              (!isLunch && menu.shift === "Dinner")) && (
               <Card
                 key={menu.id}
                 className="min-w-[250px] shadow-md hover:shadow-lg transition-shadow flex flex-col relative"
@@ -184,8 +184,11 @@ const Home = () => {
                   )}
                 </CardFooter>
               </Card>
-            ) : <p className=" w-full text-center">No Menu Available</p>
-        )}
+            )
+
+          )}
+          {(isLunch && menus.filter(m=>m.shift==='Lunch').length===0) && <p className="w-fit mx-auto">No Menu Available.</p>}
+          {(!isLunch && menus.filter(m=>m.shift==='Dinner').length===0) && <p className="w-fit mx-auto">No Menu Available.</p>}
       </div>
     </section>
   );

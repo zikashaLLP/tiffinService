@@ -19,6 +19,7 @@ const AdminDashboard = () => {
   const [isDialogOpen, setDialogOpen] = useState(false); // State to control dialog visibility
 
   const handleLogout = () => {
+    // debugger;
     logout();
     navigate("/admin/login");
     closeDialog(); // Ensure dialog is closed on logout

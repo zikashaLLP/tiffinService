@@ -24,6 +24,7 @@ import { format } from "date-fns";
 import { handleUpload } from "@/services/upload";
 
 export default function Menu({ menu, date, setFlag }) {
+  // console.log(date);
   const [menuData, setMenuData] = useState(menu.length > 0 ? menu : []);
   const [newMenuItem, setNewMenuItem] = useState("");
   const [selectedShift, setSelectedShift] = useState("Lunch");
@@ -111,9 +112,10 @@ export default function Menu({ menu, date, setFlag }) {
   };
 
   const handleAddMenu = () => {
+    // console.log(date.toISOString());
     const newMenu = {
       id: Date.now().toString(),
-      date: date.toISOString().split("T")[0],
+      date: new Date(date.getTime() + 5.5 * 60 * 60 * 1000).toISOString().split("T")[0],
       isPublished: true,
       shift: selectedShift,
       variant: "",
@@ -134,7 +136,12 @@ export default function Menu({ menu, date, setFlag }) {
 
   const handleDiscardChanges = () => {
     setEditingMenuId(null);
-    setMenuData(menu.length > 0 ? menu : []);
+    if(selectedShift=='Lunch'){
+    setLunchData(l=>l.filter(k=>k.id!==editingMenuId))
+    }else{
+    setDinnerData(l=>l.filter(k=>k.id!==editingMenuId))
+    }
+    // setMenuData(menu.length > 0 ? menu : []);
     setErrors({});
   };
 

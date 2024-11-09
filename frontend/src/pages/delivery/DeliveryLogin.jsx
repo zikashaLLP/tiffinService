@@ -5,17 +5,17 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
-import { loginService } from "@/services/auth";
+import { deliveryLoginService, loginService } from "@/services/auth";
 import { useToast } from "@/hooks/use-toast"; // Import useToast hook
 import { login } from "@/utils/auth";
 
-const AdminLogin = () => {
+const DeliveryLogin = () => {
   const navigate = useNavigate();
   const { toast } = useToast(); // Destructure toast function from useToast
-  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({ mobile: "", password: "" });
   const [loading, setLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -24,13 +24,13 @@ const AdminLogin = () => {
 
   const validateForm = () => {
     let isValid = true;
-    const newErrors = { email: "", password: "" };
+    const newErrors = { mobile: "", password: "" };
 
-    if (!email) {
-      newErrors.email = "Email is required";
+    if (!mobile) {
+      newErrors.mobile = "Mobile number is required";
       isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "Invalid email format";
+    } else if (!/^\+?([0-9]{1,3})\)?([0-9]{6,14})$/.test(mobile)) {
+      newErrors.mobile = "Invalid mobile number format";
       isValid = false;
     }
 
@@ -49,17 +49,17 @@ const AdminLogin = () => {
   const handleLogin = () => {
     if (validateForm()) {
       setLoading(true);
-      loginService({ email, password })
+      deliveryLoginService({ mobile_no:mobile, password }) // Adjusted parameter for service call
         .then((resp) => {
-          // console.log(resp);
-          // localStorage.setItem("token", resp.token);
           toast({
             title: "Login Successful",
             description: "You have successfully logged in.",
             variant: "default",
           });
-          login(resp.token,'admin');
-          navigate("/admin");
+          const mobile = resp?.deliveryBoy?.mobile_no;
+          localStorage.setItem("mobile", mobile);
+          login(resp.token, 'delivery');
+          navigate("/delivery");
         })
         .catch((err) => {
           console.error(err);
@@ -77,22 +77,22 @@ const AdminLogin = () => {
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded-md shadow-md">
-      <h1 className="text-2xl font-bold text-center mb-6">Admin Login</h1>
+      <h1 className="text-2xl font-bold text-center mb-6">Delivery Boy Login</h1>
 
       <div className="mb-4">
-        <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Email
+        <Label htmlFor="mobile" className="block text-sm font-medium text-gray-700">
+          Mobile Number
         </Label>
         <Input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
+          id="mobile"
+          type="tel"
+          value={mobile}
+          onChange={(e) => setMobile(e.target.value)}
+          placeholder="Enter your mobile number"
           className="w-full mt-1 p-2 border rounded-md"
           required
         />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+        {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile}</p>}
       </div>
 
       <div className="mb-4">
@@ -141,4 +141,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default DeliveryLogin;

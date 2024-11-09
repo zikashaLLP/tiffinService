@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from './ui/button'
+import { NavLink } from 'react-router-dom'  // Import NavLink
 
 export default function Header() {
   return (
@@ -7,15 +7,31 @@ export default function Header() {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <h1 className="text-3xl font-bold">FoodApp</h1>
           <nav className="space-x-6">
-            <Button variant="ghost" className="text-white">
+            <NavLink 
+              to="/" 
+              className={({ isActive }) => 
+                isActive ? "text-white underline" : "text-white"
+              } // Apply underline styling if the link is active
+              end // Ensures it matches the exact route '/'
+            >
               Home
-            </Button>
-            <Button variant="ghost" className="text-white">
-              Menu
-            </Button>
-            <Button variant="ghost" className="text-white">
+            </NavLink>
+            <NavLink 
+              to="/my-orders" 
+              className={({ isActive }) => 
+                isActive ? "text-white underline" : "text-white"
+              } // Apply underline styling if the link is active
+            >
+              My Orders
+            </NavLink>
+            <NavLink 
+              to="/contact" // Assuming you have a route for contact
+              className={({ isActive }) => 
+                isActive ? "text-white underline" : "text-white"
+              } // Apply underline styling if the link is active
+            >
               Contact
-            </Button>
+            </NavLink>
           </nav>
         </div>
       </header>

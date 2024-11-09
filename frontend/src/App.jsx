@@ -1,40 +1,59 @@
-// // src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import TestToast from './pages/TestToast';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
+// Import pages
 import Home from './pages/Home';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/AdminLogin';
-import ProtectedRoute from './components/ProtectedRoute';
-import { ToastProvider } from './components/ui/toast';
-import GlobalToastContainer from './components/GlobalToastContainer';
-import { isLoggedIn } from './utils/auth';
 import Checkout from './pages/Checkout';
+import MyOrders from './pages/MyOrders';
+
+// Import components
+import GlobalToastContainer from './components/GlobalToastContainer';
+import { isLoggedIn, isRole } from './utils/auth';
+import RoleProtectedRoute from './components/ProtectedRoute';
+import DeliveryLogin from './pages/delivery/DeliveryLogin';
+import DeliveryDashboard from './pages/delivery/DeliveryDashboard';
+import PaymentStatus from './pages/PaymentStatus';
 
 function App() {
   return (
-    
     <Router>
       <Routes>
-        {/* Public Route */}
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/payment-status/:transactionId" element={<PaymentStatus />} />
+        <Route path="/my-orders" element={<MyOrders />} />
 
+        {/* Admin Login Route */}
+        <Route path="/admin/login" element={isLoggedIn() && isRole('admin') ? <Navigate to="/admin" /> : <AdminLogin />} />
 
-        {/* Admin Module Routes */}
-        <Route path="/admin/login" element={isLoggedIn() ? <Navigate to={'/admin'}/>: <AdminLogin />} />
-        {/* <Route path="/delivery/login" element={isLoggedIn() ? <Navigate to={'/delivery'}/>: <AdminLogin />} /> */}
-        
+        {/* Delivery Login Route */}
+        <Route path="/delivery/login" element={isLoggedIn() && isRole('delivery') ? <Navigate to="/delivery" /> : <DeliveryLogin />} />
+
         {/* Protected Admin Dashboard Route */}
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+            <RoleProtectedRoute allowedRoles={['admin']}>
               <AdminDashboard />
-            </ProtectedRoute>
+            </RoleProtectedRoute>
           }
         />
+
+        {/* Protected Delivery Dashboard Route */}
+        <Route
+          path="/delivery"
+          element={
+            <RoleProtectedRoute allowedRoles={['delivery']}>
+              <DeliveryDashboard />
+            </RoleProtectedRoute>
+          }
+        />
+
+        {/* Redirect user if trying to access an undefined route */}
+        <Route path="*" element={<Navigate replace to="/" />} />
       </Routes>
       <GlobalToastContainer />
     </Router>
@@ -42,7 +61,3 @@ function App() {
 }
 
 export default App;
-// App.js or your main route file
-
-
-

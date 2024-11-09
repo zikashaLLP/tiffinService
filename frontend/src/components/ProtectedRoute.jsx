@@ -1,11 +1,10 @@
-// src/components/ProtectedRoute.js
-
+// src/components/RoleProtectedRoute.js
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { isLoggedIn } from '../utils/auth';
+import { isAuthorized } from '../utils/auth';
 
-const ProtectedRoute = ({ children }) => {
-  return isLoggedIn() ? children : <Navigate to="/admin/login" />;
+const RoleProtectedRoute = ({ children, allowedRoles }) => {
+  return isAuthorized(allowedRoles) ? children : <Navigate to={`/${allowedRoles[0]}/login`} />;
 };
 
-export default ProtectedRoute;
+export default RoleProtectedRoute;

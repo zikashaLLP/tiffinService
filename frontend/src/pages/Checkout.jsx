@@ -12,13 +12,14 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast"; // Assuming toast notifications are used
 import { Separator } from "@/components/ui/separator";
-import { addOrder, getAddress } from "@/services/user";
+import { addOrder, getAddress, initiatePayment } from "@/services/user";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const location = useLocation();
   const cart = location.state?.cart;
+  const [isLoading, setIsLoading] = useState(false)
 
   const [addresses, setAddresses] = useState([]);
 
@@ -79,21 +80,43 @@ const Checkout = () => {
     e.preventDefault();
     if (validateForm()) {
       // console.log("Order Data:", form);
+      setIsLoading(true)
       const orderData = { ...form, menus:cart };
       // console.log("Submitting Order:", orderData);
       addOrder(orderData)
         .then((resp) => {
           console.log(resp);
-          toast({
-            title: "Order Submitted",
-            description: "Your order has been placed successfully.",
-            variant: "success",
-          });
+          const order = resp.order;
+          const {id, mobile_no, totalAmount} = order;
+          const paymentInfo = {orderId:id,amount:totalAmount,mobileNumber:mobile_no}
+          initiatePayment(paymentInfo)
+          .then((resp)=>{
+            console.log(resp);
+            const {url} = resp.data;
+            window.location.href = url;
+          })
+          .catch((err)=>{
+            console.log(err);
+            toast({
+              title: "Payment Error",
+              description: "Failed to initiate payment.",
+              variant: "destructive",
+            });
+          }).finally(()=>{
+            setIsLoading(false)
+          })
+          // toast({
+          //   title: "Order Submitted",
+          //   description: "Your order has been placed successfully.",
+          //   variant: "success",
+          // });
           
-          navigate("/")
+          // navigate("/")
         })
         .catch((err) => {
           console.log(err);
+        }).finally(()=>{
+          setIsLoading(false)
         });
 
       // navigate("/confirmation"); // Navigate to confirmation page
@@ -108,6 +131,11 @@ const Checkout = () => {
 
   return (
     <div className="container mx-auto p-8">
+      {isLoading && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="loader"></div>
+        </div>
+      )}
       <h2 className="text-2xl font-bold mb-6 text-center">Checkout</h2>
       <form
         onSubmit={handleSubmit}

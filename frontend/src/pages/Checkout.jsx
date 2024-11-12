@@ -13,6 +13,7 @@ import {
 import { useToast } from "@/hooks/use-toast"; // Assuming toast notifications are used
 import { Separator } from "@/components/ui/separator";
 import { addOrder, getAddress, initiatePayment } from "@/services/user";
+import Header from "@/components/Header";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -130,16 +131,17 @@ const Checkout = () => {
   };
 
   return (
-    <div className="container mx-auto p-8">
+    <div className="container mx-auto ">
       {isLoading && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
           <div className="loader"></div>
         </div>
       )}
-      <h2 className="text-2xl font-bold mb-6 text-center">Checkout</h2>
+      {/* <Header/> */}
+      <h2 className="text-2xl font-bold mb-2 text-center p-8 mt-8 ">Checkout</h2>
       <form
         onSubmit={handleSubmit}
-        className="max-w-lg mx-auto bg-white p-6 shadow-md rounded-lg"
+        className="max-w-lg mx-auto bg-white p-6 shadow-lg border rounded-lg"
       >
         {/* Address Selection */}
         <div className="mb-4">
@@ -198,7 +200,7 @@ const Checkout = () => {
         {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full bg-teal-500 text-white hover:bg-teal-600"
+          className="w-full bg-primary text-white hover:bg-primary/90"
         >
           Place Order
         </Button>

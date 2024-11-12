@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-// Import pages
-import Home from './pages/Home';
+
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/AdminLogin';
 import Checkout from './pages/Checkout';
@@ -15,6 +14,10 @@ import RoleProtectedRoute from './components/ProtectedRoute';
 import DeliveryLogin from './pages/delivery/DeliveryLogin';
 import DeliveryDashboard from './pages/delivery/DeliveryDashboard';
 import PaymentStatus from './pages/PaymentStatus';
+import Home from './pages/Home';
+import Menu from './pages/Menu';
+import About from './pages/About';
+import ContactPage from './pages/ContactPage';
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
+        <Route path="/menu" element={<Menu />} />
+        <Route path="/about-us" element={<About />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/payment-status/:transactionId" element={<PaymentStatus />} />
         <Route path="/my-orders" element={<MyOrders />} />

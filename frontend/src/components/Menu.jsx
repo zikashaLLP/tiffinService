@@ -693,6 +693,7 @@ export default function Menu({ menu, date, setFlag }) {
         )}
       <div className="w-full flex justify-center">
         <Button
+          variant={'ghost'}
           className="w-full max-w-3xl bg-neutral-900 text-white mt-4 mb-8"
           onClick={handleAddMenu}
           disabled={editingMenuId !== null} // Disable when in edit mode

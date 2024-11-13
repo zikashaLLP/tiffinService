@@ -24,7 +24,7 @@ const SectionHeader2 = ({ text, color, textColor }) => {
           src={'/Line2Gr.svg'}
         />
       </div>
-      <p className="font-light text-xl md:w-96 mx-auto text-justify text-gray-400">{text}</p>
+      <p className="font-light text-xl text-center md:w-[500px] mx-auto text-gray-400">{text}</p>
     </div>
   );
 };

@@ -13,14 +13,13 @@ export default function Home() {
         <Header />
       </div>
 
-      <main className="container mx-auto flex-grow">
-        <SpecialDish />
-        <SpecialDishSection/>
+      <main className="flex-grow">
+        <SpecialDish className="container mx-auto" />
+        <SpecialDishSection className="my-16"/>
         <Link to={'/menu'} className=' my-16 relative px-4 md:px-0'>
           <img className=' mx-auto my-4' src="Section.png" alt="" />          
         </Link>
         <Working/>
-        
       </main>
 
       <Footer />

@@ -40,3 +40,41 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Button styling */
+.btn-shine {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* Shining effect */
+.btn-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75px;
+  width: 50px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: skewX(-45deg);
+  transition: left 0.5s ease;
+}
+
+/* Hover effect */
+.btn-shine:hover::before {
+  left: 125%;
+}
+
+/* Optional: hover background color change */
+.btn-shine:hover {
+  background-color: #0056b3;
+}

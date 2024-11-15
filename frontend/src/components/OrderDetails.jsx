@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
+import { cn } from "@/lib/utils"
 
 import {
   CalendarIcon,
@@ -12,6 +13,8 @@ import {
   Truck,
   CheckCircle,
   AlertTriangle,
+  ChevronFirstIcon,
+  ChevronLastIcon,
 } from "lucide-react";
 
 import { Dialog, DialogContent, DialogOverlay } from "./ui/dialog";
@@ -33,9 +36,12 @@ import {
 } from "./ui/table";
 import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
+import { Label } from "./ui/label";
 import { assignOrder, getDeliveryBoys, getOrders } from "@/services/admin";
 import { useToast } from "@/hooks/use-toast";
 import DeliveryBoyCard from "./DeliveryBoyCard";
+import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
+import { Calendar } from "./ui/calendar";
 
 function OrderDetails() {
   const navigate = useNavigate();
@@ -301,6 +307,9 @@ function OrderDetails() {
     unexpected:'Cancelled'
   }
 
+  console.log(date, shift, status, isOrder);
+  
+
   return (
     <div className="container mx-auto p-10 h-screen overflow-auto">
       {isLoading && (
@@ -313,115 +322,118 @@ function OrderDetails() {
       {/* Filters UI here */}
       <div className="bg-white p-4 rounded-lg mb-4 shadow">
         <h2 className="text-lg font-semibold mb-2">Filters</h2>
-        <div className="flex items-center justify-between gap-4 w-full overflow-x-auto">
-          <div className="flex items-center flex-1 space-x-2">
-            <span>Delivery</span>
-            <div
-              onClick={() => handleToggleDeliveryOrder(!isOrder)}
-              className={`relative inline-flex items-center h-6 w-12 cursor-pointer rounded-full transition-colors duration-300 ${
-                isOrder ? "bg-blue-600" : "bg-gray-400"
-              }`}
-            >
-              <span
-                className={`inline-block w-5 h-5 transform bg-white rounded-full shadow transition-transform duration-300 ${
-                  isOrder ? "translate-x-6" : "translate-x-1"
-                }`}
+        <div className="flex flex-wrap justify-between gap-4">
+          {/* Filters inputs */}
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center space-x-2">
+              <span>Delivery</span>
+              <Switch 
+                id="group-by-address"
+                checked={isOrder}
+                onCheckedChange={() => handleToggleDeliveryOrder(!isOrder)} 
               />
+              <span>Order</span>
             </div>
-            <span>Order</span>
-          </div>
-          {/* Date Picker */}
-          <div className="flex items-center flex-1 space-x-2">
-            <CalendarIcon className="h-5 w-5 text-gray-700" />
-            <input
-              type="date"
-              value={date ? format(date, "yyyy-MM-dd") : ""}
-              onChange={(e) => setDate(new Date(e.target.value))}
-              className="p-2 border rounded w-full"
-            />
-          </div>
 
-          {/* Shift Dropdown */}
-          {!isOrder && (
-            <div className="flex-1">
-              <Select value={shift} onValueChange={setShift}>
+            {/* Date Picker */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "justify-start text-left font-normal",
+                    !date && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 bg-white border drop-shadow z-10 rounded mt-1">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+
+            {/* Shift Dropdown */}
+            {!isOrder && (
+              <div className="flex-1">
+                <Select value={shift} onValueChange={setShift}>
+                  <SelectTrigger className="w-full bg-white border rounded">
+                    <SelectValue placeholder="Select Shift" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white shadow-lg rounded border mt-2">
+                    <SelectItem value="Lunch" className="hover:bg-gray-100 p-2">
+                      Lunch
+                    </SelectItem>
+                    <SelectItem value="Dinner" className="hover:bg-gray-100 p-2">
+                      Dinner
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Status Dropdown */}
+            <div className="">
+              <Select value={status} onValueChange={setStatus}>
                 <SelectTrigger className="w-full bg-white border rounded">
-                  <SelectValue placeholder="Select Shift" />
+                  <SelectValue placeholder="Select Status" />
                 </SelectTrigger>
                 <SelectContent className="bg-white shadow-lg rounded border mt-2">
-                  <SelectItem value="Lunch" className="hover:bg-gray-100 p-2">
-                    Lunch
+                  <SelectItem value="all" className="hover:bg-gray-100 p-2">
+                    All Statuses
                   </SelectItem>
-                  <SelectItem value="Dinner" className="hover:bg-gray-100 p-2">
-                    Dinner
+                  <SelectItem value="pending" className="hover:bg-gray-100 p-2">
+                    Pending
+                  </SelectItem>
+                  <SelectItem
+                    value="isAssigned"
+                    className="hover:bg-gray-100 p-2"
+                  >
+                    Is Assigned
+                  </SelectItem>
+                  <SelectItem
+                    value="outForDelivery"
+                    className="hover:bg-gray-100 p-2"
+                  >
+                    Out For Delivery
+                  </SelectItem>
+                  <SelectItem value="done" className="hover:bg-gray-100 p-2">
+                    Done
+                  </SelectItem>
+                  <SelectItem
+                    value="unexpected"
+                    className="hover:bg-gray-100 p-2"
+                  >
+                    Unexpected
                   </SelectItem>
                 </SelectContent>
               </Select>
             </div>
-          )}
 
-          {/* Status Dropdown */}
-          <div className="flex-1">
-            <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger className="w-full bg-white border rounded">
-                <SelectValue placeholder="Select Status" />
-              </SelectTrigger>
-              <SelectContent className="bg-white shadow-lg rounded border mt-2">
-                <SelectItem value="all" className="hover:bg-gray-100 p-2">
-                  All Statuses
-                </SelectItem>
-                <SelectItem value="pending" className="hover:bg-gray-100 p-2">
-                  Pending
-                </SelectItem>
-                <SelectItem
-                  value="isAssigned"
-                  className="hover:bg-gray-100 p-2"
-                >
-                  Is Assigned
-                </SelectItem>
-                <SelectItem
-                  value="outForDelivery"
-                  className="hover:bg-gray-100 p-2"
-                >
-                  Out For Delivery
-                </SelectItem>
-                <SelectItem value="done" className="hover:bg-gray-100 p-2">
-                  Done
-                </SelectItem>
-                <SelectItem
-                  value="unexpected"
-                  className="hover:bg-gray-100 p-2"
-                >
-                  Unexpected
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Group by Address Toggle */}
-          <div className="flex items-center flex-1 space-x-2">
-            <span>Group by Address</span>
-            <div
-              onClick={() => handleToggleGroupByAddress(!isGroupedByAddress)}
-              className={`relative inline-flex items-center h-6 w-12 cursor-pointer rounded-full transition-colors duration-300 ${
-                isGroupedByAddress ? "bg-blue-600" : "bg-gray-400"
-              }`}
-            >
-              <span
-                className={`inline-block w-5 h-5 transform bg-white rounded-full shadow transition-transform duration-300 ${
-                  isGroupedByAddress ? "translate-x-6" : "translate-x-1"
-                }`}
+            {/* Group by Address Toggle */}
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="group-by-address">Group by Address</Label>
+              <Switch 
+                id="group-by-address"
+                checked={isGroupedByAddress}
+                onCheckedChange={() => handleToggleGroupByAddress(!isGroupedByAddress)} 
               />
             </div>
-          </div>
 
+          </div>
           {/* Apply Filters Button */}
-          <button
+          <Button
             onClick={applyFilters}
-            className="p-2 bg-blue-500 text-white rounded shadow"
+            className="bg-primary text-white rounded shadow"
           >
             Apply Filters
-          </button>
+          </Button>
         </div>
 
         {/* Hello */}
@@ -532,9 +544,10 @@ function OrderDetails() {
         </div>
         <div className="flex items-center gap-2">
           {/* Page size selector */}
-          <Select
+          {/* <Select
             value={itemsPerPage.toString()}
             onValueChange={(value) => setItemsPerPage(parseInt(value))}
+            className="bg-white"
           >
             <SelectTrigger>{itemsPerPage} per page</SelectTrigger>
             <SelectContent>
@@ -542,12 +555,28 @@ function OrderDetails() {
               <SelectItem value="20">20</SelectItem>
               <SelectItem value="50">50</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
+
+          <div className="flex items-center gap-2">
+            <span>Rows per page</span>
+            <Select value={itemsPerPage.toString()} onValueChange={(value) => setItemsPerPage(parseInt(value))}>
+              <SelectTrigger className="w-[70px] bg-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Pagination buttons */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center gap-2">
             <Button
               onClick={() => setCurrentPage(1)}
               disabled={currentPage === 1}
+              className="bg-white"
             >
               <ChevronsLeftIcon className="w-5 h-5" />
             </Button>
@@ -556,6 +585,7 @@ function OrderDetails() {
                 setCurrentPage((current) => Math.max(1, current - 1))
               }
               disabled={currentPage === 1}
+              className="bg-white"
             >
               <ChevronLeftIcon className="w-5 h-5" />
             </Button>
@@ -567,14 +597,36 @@ function OrderDetails() {
                 setCurrentPage((current) => Math.min(totalPages, current + 1))
               }
               disabled={currentPage === totalPages}
+              className="bg-white"
             >
               <ChevronRightIcon className="w-5 h-5" />
             </Button>
             <Button
               onClick={() => setCurrentPage(totalPages)}
               disabled={currentPage === totalPages}
+              className="bg-white"
             >
               <ChevronsRightIcon className="w-5 h-5" />
+            </Button>
+          </div> */}
+
+          {/* Pagination buttons */}
+          <div className="flex gap-1">
+            <Button className="bg-white" variant="outline" size="icon" onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>
+              <span className="sr-only">First page</span>
+              <ChevronFirstIcon className="h-4 w-4" />
+            </Button>
+            <Button className="bg-white" variant="outline" size="icon" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+              <span className="sr-only">Previous page</span>
+              <ChevronLeftIcon className="h-4 w-4" />
+            </Button>
+            <Button className="bg-white" variant="outline" size="icon" onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+              <span className="sr-only">Next page</span>
+              <ChevronRightIcon className="h-4 w-4" />
+            </Button>
+            <Button className="bg-white" variant="outline" size="icon" onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>
+              <span className="sr-only">Last page</span>
+              <ChevronLastIcon className="h-4 w-4" />
             </Button>
           </div>
         </div>

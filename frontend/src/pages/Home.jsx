@@ -13,8 +13,11 @@ export default function Home() {
       </div>
 
       <main className="flex-grow">
-        <SpecialDish className="container mx-auto" />
+        <SpecialDish className="container mx-auto p-16" />
         <SpecialDishSection className="my-16"/>
+
+
+
         <Link to={'/menu'} className=' my-16 relative px-4 md:px-0'>
           <img className=' mx-auto my-4' src="Section.png" alt="" />          
         </Link>

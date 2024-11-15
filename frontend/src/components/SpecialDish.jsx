@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 export default function SpecialDish({ className }) {
     return (
         <div className={className}>
-            <div className="flex flex-col md:flex-row justify-between items-center py-16 md:py-0">
+            <div className="flex flex-col md:flex-row justify-between items-center">
                 <div className="flex-1">
 
                     <div className="mb-5">

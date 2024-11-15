@@ -658,19 +658,21 @@ export default function Menu({ menu, date, setFlag }) {
   );
 
   return (
-    <div key={date} className="bg-white">
+    <div key={date} className="bg-white rounded-lg">
       <div className="flex flex-col gap-2 mb-4 p-4 h-full">
-        <Label>Select Shift</Label>
+        <Label htmlFor="shift">Select Shift</Label>
         <Select
           value={selectedShift}
           onValueChange={(value) => {
             setSelectedShift(value);
           }}
+          id="shift"
+          className="bg-white"
         >
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Select Shift" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white">
             <SelectItem value="Lunch">Lunch</SelectItem>
             <SelectItem value="Dinner">Dinner</SelectItem>
           </SelectContent>

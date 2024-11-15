@@ -1,5 +1,4 @@
 import Header from '@/components/Header';
-import React from 'react';
 import Footer from './Footer';
 import SpecialDish from '@/components/SpecialDish';
 import SpecialDishSection from '@/components/SpecialDishSection';
@@ -19,6 +18,7 @@ export default function Home() {
         <Link to={'/menu'} className=' my-16 relative px-4 md:px-0'>
           <img className=' mx-auto my-4' src="Section.png" alt="" />          
         </Link>
+
         <Working/>
       </main>
 

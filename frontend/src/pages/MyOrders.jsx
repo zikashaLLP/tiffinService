@@ -169,7 +169,7 @@ const MyOrders = () => {
         </div>
       )}
       <Header />
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4 py-16">
         <div className="max-w-lg mx-auto">
           <Card>
             <CardHeader>
@@ -188,7 +188,7 @@ const MyOrders = () => {
                   }}
                   className={`${error ? "border-red-500" : ""}`}
                 />
-                <Button onClick={handleSearch}>
+                <Button className="text-white" onClick={handleSearch}>
                   <Search className="w-4 h-4" />
                   Search
                 </Button>

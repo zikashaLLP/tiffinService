@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 export default function SpecialDish({ className }) {
     return (
         <div className={className}>
-            <div className="flex flex-col md:flex-row justify-between items-center py-16">
+            <div className="flex flex-col md:flex-row justify-between items-center py-16 md:py-0">
                 <div className="flex-1">
 
                     <div className="mb-5">
@@ -18,14 +18,14 @@ export default function SpecialDish({ className }) {
                     <p className="text-sm md:text-lg text-gray-600 mb-6">Serving North-Indian, South-Indian and desi-Chinese cuisines, choose from Vegetarian and Non-Vegetarian meal options.</p>
                     
                     <div className="flex gap-4 mb-6">
-                    <NavLink to="/menu" className="btn-order md:text-white">
+                    <NavLink to="/menu" className="btn-order md:text-white text-center w-full md:w-auto">
                         Check today's menus
                     </NavLink>
                     </div>
                     
                 </div>
-                <div className="flex-1 text-center items-center">
-                    <img src="/image1.png" alt="Special Tiffin" className="inline-block md:h-96" />
+                <div className="flex-1 text-right items-center">
+                    <img src="/image1.png" alt="Special Tiffin" className="inline-block max-w-[400px] w-full" />
                 </div>
             </div>
         </div>

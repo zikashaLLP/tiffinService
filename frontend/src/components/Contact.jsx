@@ -80,7 +80,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="max-w-xl mx-4 md:mx-auto p-4 bg-white my-8 border shadow-lg rounded-2xl ">
+    <div className="max-w-xl mx-4 md:mx-auto p-4 bg-white my-16 border shadow-lg rounded-2xl ">
       <h2 className="text-xl font-semibold text-center text-gray-800 mb-6">
         Contact Us
       </h2>

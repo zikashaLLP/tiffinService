@@ -63,6 +63,10 @@
   }
 }
 
+.container {
+  @apply mx-auto px-6;
+}
+
 /* @layer base {
   * {
     @apply border-border;
@@ -176,4 +180,23 @@ img.adjust-color {
 .btn-order:hover {
   @apply bg-green-600;
   background-image: none;
+}
+
+
+/* Header style */
+.underline-img {
+  position: relative;
+}
+.underline-img::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 2px;
+  right: 2px;
+  height: 6px;
+
+  background-image: var(--underline-img-url);
+  background-size: 100% 6px;
+  background-repeat: no-repeat;
+  background-position: center bottom;
 }

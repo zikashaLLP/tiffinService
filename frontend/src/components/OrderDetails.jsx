@@ -466,7 +466,7 @@ function OrderDetails() {
               <h2 className="text-xl font-semibold mb-4">
                 Assign Delivery Boy
               </h2>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 {console.log(deliveryBoys)}
                 {/* Assuming deliveryBoys is fetched elsewhere and set in state */}
                 {deliveryBoys.map((boy) => {
@@ -558,7 +558,7 @@ function OrderDetails() {
           </Select> */}
 
           <div className="flex items-center gap-2">
-            <span>Rows per page</span>
+            <span className="whitespace-nowrap">Rows per page</span>
             <Select value={itemsPerPage.toString()} onValueChange={(value) => setItemsPerPage(parseInt(value))}>
               <SelectTrigger className="w-[70px] bg-white">
                 <SelectValue />

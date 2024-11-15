@@ -73,7 +73,7 @@ export default function MenuDetails() {
         <TabsList className="grid w-full grid-cols-3 gap-3 bg-white h-auto p-2">
           <TabsTrigger
             value="today"
-            className="py-2 px-2 d-flex flex-wrap hover:bg-gray-100 data-[state=active]:bg-black data-[state=active]:text-white"
+            className="py-2 px-2 d-flex flex-wrap hover:bg-gray-100 data-[state=active]:bg-primary data-[state=active]:text-white"
           >
             {formatDate(today)}
             <span className="ms-2 text-xs">
@@ -82,7 +82,7 @@ export default function MenuDetails() {
           </TabsTrigger>
           <TabsTrigger
             value="tomorrow"
-            className="py-2 px-2 d-flex flex-wrap hover:bg-gray-100 data-[state=active]:bg-black data-[state=active]:text-white"
+            className="py-2 px-2 d-flex flex-wrap hover:bg-gray-100 data-[state=active]:bg-primary data-[state=active]:text-white"
           >
             {formatDate(tomorrow)}{" "}
             <span className="ms-2 text-xs">
@@ -91,7 +91,7 @@ export default function MenuDetails() {
           </TabsTrigger>
           <TabsTrigger
             value="dayAfterTomorrow"
-            className="py-2 px-2 d-flex flex-wrap hover:bg-gray-100 data-[state=active]:bg-black data-[state=active]:text-white"
+            className="py-2 px-2 d-flex flex-wrap hover:bg-gray-100 data-[state=active]:bg-primary data-[state=active]:text-white"
           >
             {formatDate(dayAfterTomorrow)}
             <span className="ms-2 text-xs">

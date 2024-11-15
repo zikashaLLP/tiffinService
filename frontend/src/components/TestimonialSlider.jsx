@@ -46,7 +46,7 @@ const TestimonialSlider = ({ testimonials }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 mt-8">
+    <div className="container mx-auto px-4">
       <Slider {...settings}>
         {testimonials.map((testimonial, index) => (
           <div key={index + 1} className="outline-none">

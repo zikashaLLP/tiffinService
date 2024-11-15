@@ -13,7 +13,7 @@ export default function Home() {
       </div>
 
       <main className="flex-grow">
-        <SpecialDish className="container mx-auto p-16" />
+        <SpecialDish className="container mx-auto" />
         <SpecialDishSection className="my-16"/>
 
 

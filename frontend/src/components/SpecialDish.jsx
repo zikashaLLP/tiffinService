@@ -5,7 +5,7 @@ export default function SpecialDish({ className }) {
     return (
         <div className={className}>
             <div className="flex flex-col md:flex-row justify-between items-center">
-                <div className="flex-1">
+                <div className="flex-1 mt-12 mb-0 md:mb-12">
 
                     <div className="mb-5">
                         <span className="text-primary py-2 px-3 bg-light-yellow rounded-3xl">More Than Faster</span>
@@ -17,10 +17,10 @@ export default function SpecialDish({ className }) {
                     
                     <p className="text-sm md:text-lg text-gray-600 mb-6">Serving North-Indian, South-Indian and desi-Chinese cuisines, choose from Vegetarian and Non-Vegetarian meal options.</p>
                     
-                    <div className="flex gap-4 mb-6">
-                    <NavLink to="/menu" className="btn-order md:text-white text-center w-full md:w-auto">
-                        Check today's menus
-                    </NavLink>
+                    <div className="flex gap-4 mb-2">
+                        <NavLink to="/menu" className="btn-order md:text-white text-center w-full md:w-auto">
+                            Check today's menus
+                        </NavLink>
                     </div>
                     
                 </div>

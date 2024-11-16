@@ -11,7 +11,7 @@ export default function Header() {
   const menuClass = isOpen ? "fixed inset-0 bg-black z-40 bg-opacity-85" : "hidden";
 
   return (
-    <header className="bg-white py-4 drop-shadow font-sans">
+    <header className="bg-white py-4 font-sans header-shadow">
       <div className="container mx-auto flex justify-between">
         <h1 className="font-bold">
           <img onClick={() => navigate("/")} role="button" src="/DailyDoseLogo.png" className="h-12" alt="Daily Dose Logo" />
@@ -26,14 +26,14 @@ export default function Header() {
         <nav className={`${menuClass} md:flex md:items-center md:space-x-6 md:bg-transparent`}>
           <ul
             style={{'--underline-img-url': `url(${UnderlineIcon})`}}
-            className={`md:flex md:flex-row md:space-x-6 md:items-center text-white md:text-gray-400 font-medium text-lg p-10 md:p-0 space-y-4 md:space-y-0`}
+            className={`md:flex md:flex-row md:space-x-6 md:items-center text-white md:text-gray-400 text-lg p-10 md:p-0 space-y-4 md:space-y-0`}
           >
             <li>
               <NavLink
                 to="/"
                 end
                 className={({ isActive }) =>
-                  isActive ? "underline-img text-primary font-semibold" : "text-white md:text-gray-400"
+                  isActive ? "underline-img text-primary font-medium" : "text-white md:text-gray-400"
                 }
               >
                 Home
@@ -43,7 +43,7 @@ export default function Header() {
               <NavLink
                 to="/about-us"
                 className={({ isActive }) =>
-                  isActive ? "underline-img text-primary font-semibold" : "text-white md:text-gray-400"
+                  isActive ? "underline-img text-primary font-medium" : "text-white md:text-gray-400"
                 }
               >
                 About Us
@@ -53,7 +53,7 @@ export default function Header() {
               <NavLink
                 to="/my-orders"
                 className={({ isActive }) =>
-                  isActive ? "underline-img text-primary font-semibold" : "text-white md:text-gray-400"
+                  isActive ? "underline-img text-primary font-medium" : "text-white md:text-gray-400"
                 }
               >
                 My Orders
@@ -63,7 +63,7 @@ export default function Header() {
               <NavLink
                 to="/contact"
                 className={({ isActive }) =>
-                  isActive ? "underline-img text-primary font-semibold" : "text-white md:text-gray-400"
+                  isActive ? "underline-img text-primary font-medium" : "text-white md:text-gray-400"
                 }
               >
                 Contact

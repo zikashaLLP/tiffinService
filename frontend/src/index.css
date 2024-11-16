@@ -163,17 +163,18 @@ img.adjust-color {
   content: '';
   position: absolute;
   top: 0;
-  left: -75px;
+  right: -50px;
   width: 50px;
   height: 100%;
   background: rgba(255, 255, 255, 0.5);
-  transform: skewX(-45deg);
-  transition: left 0.5s ease;
+  transform: skewX(-60deg);
+  transition-delay: 0.1s;
+  transition: right 0.4s ease;
 }
 
 /* Hover effect */
 .btn-order:hover::before {
-  left: 125%;
+  right: 125%;
 }
 
 /* Optional: hover background color change */
@@ -199,4 +200,8 @@ img.adjust-color {
   background-size: 100% 6px;
   background-repeat: no-repeat;
   background-position: center bottom;
+}
+
+.header-shadow {
+  box-shadow: 0 5px 16px 0 rgba(0, 0, 0, 0.1);
 }

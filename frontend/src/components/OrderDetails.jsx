@@ -498,6 +498,7 @@ function OrderDetails() {
               <TableHead as="th">Address</TableHead>
               <TableHead as="th">Mobile No</TableHead>
               <TableHead as="th">Order Date</TableHead>
+              <TableHead as="th">Delivery Date</TableHead>
               <TableHead as="th">Status</TableHead>
               <TableHead as="th">Shift</TableHead>
               <TableHead as="th">Total Amount</TableHead>
@@ -525,6 +526,9 @@ function OrderDetails() {
                 <TableCell>{order.mobile_no}</TableCell>
                 <TableCell>
                   {new Date(order.orderDate).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  {new Date(order.deliveryDate).toLocaleDateString()}
                 </TableCell>
                 <TableCell>{statusFormat[order.status]}</TableCell>
                 <TableCell>{order.shift}</TableCell>

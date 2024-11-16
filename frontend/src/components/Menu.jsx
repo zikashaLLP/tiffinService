@@ -48,7 +48,6 @@ export default function Menu({ menu, date, setFlag }) {
   const validateForm = (menu) => {
     const newErrors = {};
     if (!menu.variant) newErrors.variant = "Variant is required";
-    if (!menu.description) newErrors.description = "Description is required";
     if (!menu.price || isNaN(menu.price) || menu.price <= 0)
       newErrors.price = "Valid price is required";
     if (!menu.status) newErrors.status = "Status is required";
@@ -334,7 +333,7 @@ export default function Menu({ menu, date, setFlag }) {
                   (menuItem, menuItemIndex) => (
                     <div
                       key={menuItemIndex}
-                      className="flex items-center space-x-2"
+                      className="flex items-center space-x-2 mb-2"
                     >
                       <Input value={menuItem} readOnly className="flex-grow" />
                       <Button

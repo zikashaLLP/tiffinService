@@ -4,6 +4,7 @@ import SpecialDish from '@/components/SpecialDish';
 import SpecialDishSection from '@/components/SpecialDishSection';
 import Working from '@/components/Working';
 import { Link } from 'react-router-dom';
+import BannerImg from '../assets/images/banner.png'
 
 export default function Home() {
   return (
@@ -13,14 +14,21 @@ export default function Home() {
       </div>
 
       <main className="flex-grow">
-        <SpecialDish className="container mx-auto" />
-        <SpecialDishSection className="my-16"/>
+        <div className="bg-light-yellow bg-opacity-30 pb-16">
+          <SpecialDish className="container mx-auto" />
+        </div>
+        <SpecialDishSection className=""/>
 
-
-
-        <Link to={'/menu'} className=' my-16 relative px-4 md:px-0'>
-          <img className=' mx-auto my-4' src="Section.png" alt="" />          
-        </Link>
+        <div style={{background: `url(${BannerImg})`, backgroundSize: 'cover'}} className="container rounded-xl my-20">
+          <div className="p-20">
+            <h1 className="text-white text-4xl mb-3">The fastest</h1>
+            <h1 className="text-white text-5xl font-semibold mb-3">Delivery <span className="text-primary">Food</span></h1>
+            <Link
+              className="btn-order"
+              to={'/menu'}
+            >Order now</Link>
+          </div>
+        </div>
 
         <Working/>
       </main>

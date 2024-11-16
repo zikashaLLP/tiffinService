@@ -2,7 +2,7 @@ import React from "react";
 import { FaFacebookF, FaTwitter, FaInstagram, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import LogoDark from "../assets/images/Logo-dark.png";
+import LogoDark from "../assets/images/logo-dark.png";
 
 export default function Footer() {
   const navigate = useNavigate();

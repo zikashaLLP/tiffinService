@@ -110,13 +110,13 @@ const Menu = () => {
               >
                 <div
                   className={`absolute top-2 right-2 px-3 py-1 rounded-full text-xs font-semibold text-white ${
-                    menu.shift === "Lunch" ? "bg-green-500" : "bg-blue-500"
+                    menu.shift === "Lunch" ? "bg-primary" : "bg-blue-500"
                   }`}
                 >
                   {menu.shift}
                 </div>
 
-                {menu.photo_url ? (
+                {/* {menu.photo_url ? (
                   <img
                     src={menu.photo_url}
                     alt={menu.variant}
@@ -126,36 +126,43 @@ const Menu = () => {
                   <div className="w-full h-40 bg-gray-200 flex items-center justify-center rounded-t-lg">
                     <span className="text-gray-500">Image Unavailable</span>
                   </div>
-                )}
+                )} */}
 
-                <CardHeader>
-                  <CardTitle className="text-lg font-semibold text-gray-700">
+                { 
+                  menu.photo_url &&
+                  <img
+                    src={menu.photo_url}
+                    alt={menu.variant}
+                    className="w-full h-40 object-cover rounded-t-lg"
+                  />
+                }
+
+
+                <CardContent className="flex-grow pt-4">
+                  <div className="text-lg font-semibold">
                     {menu.variant}
-                  </CardTitle>
-                  <p
-                    className={`text-sm font-semibold ${
-                      menu.status === "Available"
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {menu.status}
-                  </p>
-                </CardHeader>
-
-                <CardContent className="flex-grow">
+                    {/* <span
+                      className={`text-sm font-light ml-2 ${
+                        menu.status === "Available"
+                          ? "text-primary"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {menu.status}
+                    </span> */}
+                  </div>
+                  
                   <p className="text-gray-600 text-xs">{menu.description}</p>
-                  <Separator />
-                  <p className="font-semibold">Items:</p>
+                  <p className="font-semibold mt-2">Items:</p>
                   <p className="text-gray-700">
                     {menu.menu_items.join(", ")}
                     <span className="font-semibold mt-2 block">
-                      ₹{parseFloat(menu.price).toFixed(2)}
+                      ₹{parseFloat(menu.price).toFixed(2)}/-
                     </span>
                   </p>
                 </CardContent>
 
-                <CardFooter className="pt-4">
+                <CardFooter>
                   {getQuantity(menu.id) > 0 ? (
                     <div className="flex items-center justify-between w-full">
                       <Button
@@ -168,7 +175,7 @@ const Menu = () => {
                         {getQuantity(menu.id)}
                       </span>
                       <Button
-                        className="bg-green-500 text-white w-8 h-8 flex items-center justify-center"
+                        className="bg-primary text-white w-8 h-8 flex items-center justify-center"
                         onClick={() => handleAddToCart(menu.id)}
                       >
                         +
@@ -228,22 +235,12 @@ const Menu = () => {
         {/* Lunch/Dinner Switch */}
         <div className="flex items-center justify-center space-x-4 mb-6">
           <Label className="text-lg font-semibold">Lunch</Label>
-          <div
-            className={`relative inline-flex items-center h-6 w-12 rounded-full transition-colors duration-300 ${
-              isLunch ? "bg-gray-300" : "bg-primary"
-            }`}
-          >
-            <Switch
-              checked={!isLunch}
+
+          <Switch
+              checked={ !isLunch }
               onCheckedChange={(checked) => setIsLunch(!checked)}
-              className="opacity-0 absolute inset-0" // Hide the default switch input
-            />
-            <span
-              className={`absolute left-1 transform rounded-full bg-white w-5 h-5 transition-transform duration-300 ease-in-out ${
-                isLunch ? "translate-x-0" : "translate-x-6"
-              }`}
-            />
-          </div>
+          />
+        
           <Label className="text-lg font-semibold">Dinner</Label>
         </div>
 

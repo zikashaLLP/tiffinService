@@ -46,7 +46,7 @@ const TestimonialSlider = ({ testimonials }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 mt-8">
+    <div className="container mx-auto px-4">
       <Slider {...settings}>
         {testimonials.map((testimonial, index) => (
           <div key={index + 1} className="outline-none">
@@ -55,12 +55,12 @@ const TestimonialSlider = ({ testimonials }) => {
               <img
                 src={testimonial.image}
                 alt={testimonial.name}
-                className="w-full md:w-64 md:h-64 rounded-full mb-4"
+                className="w-full md:w-64 md:h-64 mb-4"
               />
               <div className="w-full mt-8 md:w-1/2 relative">
                 <img src="quote.png" className=" absolute -top-10" alt="" />
                 <p className="text-lg italic text-gray-800">
-                  "{testimonial.quote}"
+                “{testimonial.quote}”
                 </p>
                 <div className=" flex flex-col md:flex-row gap-2 md:gap-6 md:items-center">
                   <h5 className="text-xl md:text-3xl font-bold mt-2">

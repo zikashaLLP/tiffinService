@@ -2,7 +2,7 @@ import React from "react";
 
 export default function AboutUs() {
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center bg-gray-100 px-8 md:px-16 py-8">
+    <div className="flex flex-col md:flex-row justify-between items-center px-8 md:px-16 py-16">
       <div className="flex-1 text-center items-center">
         <img
           src="about_us.png"

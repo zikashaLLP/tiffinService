@@ -68,52 +68,53 @@ export default function MenuDetails() {
   return (
     <div className="container mx-auto p-10 h-screen overflow-auto">
       <h1 className="text-2xl font-bold mb-4">Menu Details</h1>
-      <Tabs defaultValue="today" className="w-full">
-        <TabsList className="flex gap-4">
+      
+      <Tabs defaultValue="today" className="max-w-xll">
+        <TabsList className="grid w-full grid-cols-3 gap-3 bg-white h-auto p-2">
           <TabsTrigger
             value="today"
-            className="flex-1 text-center p-3 border hover:bg-gray-100 data-[state=active]:bg-gray-800 data-[state=active]:text-white"
+            className="py-2 px-2 d-flex flex-wrap hover:bg-gray-100 data-[state=active]:bg-primary data-[state=active]:text-white"
           >
             {formatDate(today)}
-            <span className="ms-2 text-xs font-semibold text-red-500">
+            <span className="ms-2 text-xs">
               (Today)
             </span>
           </TabsTrigger>
           <TabsTrigger
             value="tomorrow"
-            className="flex-1 text-center p-3 border hover:bg-gray-100 data-[state=active]:bg-gray-800 data-[state=active]:text-white"
+            className="py-2 px-2 d-flex flex-wrap hover:bg-gray-100 data-[state=active]:bg-primary data-[state=active]:text-white"
           >
             {formatDate(tomorrow)}{" "}
-            <span className="ms-2 text-xs font-semibold text-red-500">
+            <span className="ms-2 text-xs">
               (Tomorrow)
             </span>
           </TabsTrigger>
           <TabsTrigger
             value="dayAfterTomorrow"
-            className="flex-1 text-center p-3 border hover:bg-gray-100 data-[state=active]:bg-gray-800 data-[state=active]:text-white"
+            className="py-2 px-2 d-flex flex-wrap hover:bg-gray-100 data-[state=active]:bg-primary data-[state=active]:text-white"
           >
             {formatDate(dayAfterTomorrow)}
-            <span className="ms-2 text-xs font-semibold text-red-500">
+            <span className="ms-2 text-xs">
               (Day after tomorrow)
             </span>
           </TabsTrigger>
         </TabsList>
         {/* <hr/> */}
-        <TabsContent value="today" className="mt-4">
+        <TabsContent value="today">
           {isLoading ? (
             <p>Loading today's menu...</p>
           ) : (
             <Menu menu={todayMenu} date={today} setFlag={setFlag} />
           )}
         </TabsContent>
-        <TabsContent value="tomorrow" className="mt-4">
+        <TabsContent value="tomorrow">
           {isLoading ? (
             <p>Loading tomorrow's menu...</p>
           ) : (
             <Menu menu={tomorrowMenus} date={tomorrow} setFlag={setFlag} />
           )}
         </TabsContent>
-        <TabsContent value="dayAfterTomorrow" className="mt-4">
+        <TabsContent value="dayAfterTomorrow">
           {isLoading ? (
             <p>Loading day after tomorrow's menu...</p>
           ) : (

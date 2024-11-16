@@ -63,6 +63,10 @@
   }
 }
 
+.container {
+  @apply mx-auto px-6;
+}
+
 /* @layer base {
   * {
     @apply border-border;
@@ -113,7 +117,7 @@
   }
 }
 
-.btn-order {
+/* .btn-order {
   @apply bg-primary text-white font-semibold py-2 px-4 rounded inline-flex items-center justify-center;
   background-image: linear-gradient(to right, #9ced6a 0%, #347928 150%);
   background-size: 200% 100%;
@@ -127,7 +131,7 @@
   background-position: left bottom;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   animation: flow 0.5s forwards;
-}
+} */
 
 .special-font{
   font-family: "Covered By Your Grace", cursive;
@@ -141,4 +145,63 @@ img.adjust-color {
   /* filter: brightness(40%) saturate(150%) hue-rotate(100deg); */
   filter: brightness(60%) saturate(300%) hue-rotate(110deg);
 
+}
+
+.btn-order {
+  @apply bg-primary text-white py-3 px-4 rounded-full font-medium inline-flex items-center justify-center tracking-wide;
+  /* background-image: linear-gradient(to right, #49a80d 0%, #347928 150%); */
+  position: relative;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* Shining effect */
+.btn-order::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -50px;
+  width: 50px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: skewX(-60deg);
+  transition-delay: 0.1s;
+  transition: right 0.4s ease;
+}
+
+/* Hover effect */
+.btn-order:hover::before {
+  right: 125%;
+}
+
+/* Optional: hover background color change */
+.btn-order:hover {
+  @apply bg-green-600;
+  background-image: none;
+}
+
+
+/* Header style */
+.underline-img {
+  position: relative;
+}
+.underline-img::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 2px;
+  right: 2px;
+  height: 6px;
+
+  background-image: var(--underline-img-url);
+  background-size: 100% 6px;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
+
+.header-shadow {
+  box-shadow: 0 5px 16px 0 rgba(0, 0, 0, 0.1);
 }

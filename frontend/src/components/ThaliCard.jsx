@@ -9,17 +9,19 @@ const ThaliCard = ({ title, price, imageSrc, ratingCount }) => {
   };
 
   return (
-    <div className="shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out rounded-lg py-2 overflow-hidden w-80 md:w-32 lg:w-48 bg-white">
-      <img src={imageSrc} alt={title} className=" w-3/4 mx-auto object-contain" />
-      <div className="p-4">
-        <div className="font-semibold text-lg">{title}</div>
-        <div className="text-gray-800">{price}</div>
-        <div className="flex">
-          {renderStars(ratingCount)}
+    <div className="">
+      <div className="p-4 flex flex-wrap justify-between bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow ease-in-out pb-16 md:pb-24 lg:pb-28">
+        <div>
+          <div className="font-semibold text-lg">{title}</div>
+          <div className="flex">
+            {renderStars(ratingCount)}
+          </div>
         </div>
+        <div className="text-gray-800">{price}</div>
       </div>
+      <img className="w-3/4 mx-auto object-contain -mt-14 md:-mt-20 lg:-mt-24" src={imageSrc} alt={title} />
     </div>
   );
-};
+}; 
 
 export default ThaliCard;

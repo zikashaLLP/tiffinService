@@ -48,7 +48,6 @@ export default function Menu({ menu, date, setFlag }) {
   const validateForm = (menu) => {
     const newErrors = {};
     if (!menu.variant) newErrors.variant = "Variant is required";
-    if (!menu.description) newErrors.description = "Description is required";
     if (!menu.price || isNaN(menu.price) || menu.price <= 0)
       newErrors.price = "Valid price is required";
     if (!menu.status) newErrors.status = "Status is required";
@@ -242,7 +241,7 @@ export default function Menu({ menu, date, setFlag }) {
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Variant" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white">
                       <SelectItem value="Full-Dish">Full-Dish</SelectItem>
                       <SelectItem value="Half-Dish">Half-Dish</SelectItem>
                     </SelectContent>
@@ -253,19 +252,21 @@ export default function Menu({ menu, date, setFlag }) {
                 </div>
               </div>
 
-              <Label>Description</Label>
-              <textarea
-                placeholder="Description"
-                value={lunchData[menuIndex].description}
-                onChange={(e) =>
-                  handleInputChange(menuIndex, "description", e.target.value)
-                }
-                className="w-full p-2 border rounded"
-                rows={3}
-              />
-              {errors.description && (
-                <p className="text-red-500 text-sm">{errors.description}</p>
-              )}
+              <div>  
+                <Label>Description</Label>
+                <textarea
+                  placeholder="Description"
+                  value={lunchData[menuIndex].description}
+                  onChange={(e) =>
+                    handleInputChange(menuIndex, "description", e.target.value)
+                  }
+                  className="w-full p-2 border rounded"
+                  rows={3}
+                />
+                {errors.description && (
+                  <p className="text-red-500 text-sm">{errors.description}</p>
+                )}
+              </div>
 
               <div className="flex space-x-4">
                 {/* Image Upload */}
@@ -315,7 +316,7 @@ export default function Menu({ menu, date, setFlag }) {
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Status" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white">
                       <SelectItem value="Available">Available</SelectItem>
                       <SelectItem value="Closed">Closed</SelectItem>
                     </SelectContent>
@@ -326,41 +327,43 @@ export default function Menu({ menu, date, setFlag }) {
                 </div>
               </div>
 
-              <Label>Menu Items</Label>
-              {lunchData[menuIndex].menu_items.map(
-                (menuItem, menuItemIndex) => (
-                  <div
-                    key={menuItemIndex}
-                    className="flex items-center space-x-2"
-                  >
-                    <Input value={menuItem} readOnly className="flex-grow" />
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="text-red-600 border-red-600 hover:bg-red-100"
-                      onClick={() =>
-                        handleRemoveMenuItem(menuIndex, menuItemIndex)
-                      }
+              <div>
+                <Label>Menu Items</Label>
+                {lunchData[menuIndex].menu_items.map(
+                  (menuItem, menuItemIndex) => (
+                    <div
+                      key={menuItemIndex}
+                      className="flex items-center space-x-2 mb-2"
                     >
-                      <Trash size={16} />
-                    </Button>
-                  </div>
-                )
-              )}
+                      <Input value={menuItem} readOnly className="flex-grow" />
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="text-red-600 border-red-600 hover:bg-red-100"
+                        onClick={() =>
+                          handleRemoveMenuItem(menuIndex, menuItemIndex)
+                        }
+                      >
+                        <Trash size={16} />
+                      </Button>
+                    </div>
+                  )
+                )}
 
-              <div className="flex items-center space-x-2">
-                <Input
-                  placeholder="Add a new menu item"
-                  value={newMenuItem}
-                  onChange={(e) => setNewMenuItem(e.target.value)}
-                />
-                <Button
-                  className="bg-green-500 text-white hover:bg-green-600"
-                  onClick={() => handleAddMenuItem(menuIndex)}
-                  disabled={!newMenuItem.trim()}
-                >
-                  <Plus size={16} />
-                </Button>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    placeholder="Add a new menu item"
+                    value={newMenuItem}
+                    onChange={(e) => setNewMenuItem(e.target.value)}
+                  />
+                  <Button
+                    className="bg-green-500 text-white hover:bg-green-600"
+                    onClick={() => handleAddMenuItem(menuIndex)}
+                    disabled={!newMenuItem.trim()}
+                  >
+                    <Plus size={16} />
+                  </Button>
+                </div>
               </div>
 
               <Separator className="my-4" />
@@ -374,7 +377,7 @@ export default function Menu({ menu, date, setFlag }) {
                     {loader ? (
                       <LoaderIcon className="animate-spin w-4 h-4 mr-2" /> // Add spinner icon
                     ) : (
-                      "Save Changes"
+                      "Save Changessss"
                     )}
                   </Button>
                 )}
@@ -658,19 +661,21 @@ export default function Menu({ menu, date, setFlag }) {
   );
 
   return (
-    <div key={date} className="bg-white">
-      <div className="flex flex-col gap-2 mb-4 p-4 h-full">
-        <Label>Select Shift</Label>
+    <div key={date} className="bg-white rounded-lg p-4">
+      <div className="flex flex-col gap-2 mb-4 pt-6 pb-4 h-full max-w-3xl mx-auto">
+        <Label htmlFor="shift">Select Shift</Label>
         <Select
           value={selectedShift}
           onValueChange={(value) => {
             setSelectedShift(value);
           }}
+          id="shift"
+          className="bg-white"
         >
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Select Shift" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-white">
             <SelectItem value="Lunch">Lunch</SelectItem>
             <SelectItem value="Dinner">Dinner</SelectItem>
           </SelectContent>
@@ -694,7 +699,7 @@ export default function Menu({ menu, date, setFlag }) {
       <div className="w-full flex justify-center">
         <Button
           variant={'ghost'}
-          className="w-full max-w-3xl bg-neutral-900 text-white mt-4 mb-8"
+          className="w-full max-w-3xl bg-primary text-white mt-4 mb-8"
           onClick={handleAddMenu}
           disabled={editingMenuId !== null} // Disable when in edit mode
         >

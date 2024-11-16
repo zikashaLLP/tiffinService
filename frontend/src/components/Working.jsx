@@ -52,7 +52,7 @@ export default function Working() {
           />
         </div>
       </div>
-      <div className="container mx-auto px-4 py-8 mt-16">
+      <div className="container mx-auto px-4 py-8 my-16">
         <SectionHeader3 text={client} color={"white"} textColor={"#111111"} />
 
         <TestimonialSlider testimonials={testimonials} />

@@ -44,10 +44,10 @@ function App() {
 
         {/* Admin Login Route */}
         <Route
-          path="/adminn/login"
+          path="/admin/login"
           element={
             isLoggedIn() && isRole("admin") ? (
-              <Navigate to="/adminn" />
+              <Navigate to="/admin" />
             ) : (
               <AdminLogin />
             )
@@ -68,7 +68,7 @@ function App() {
 
         {/* Protected Admin Dashboard Route */}
         <Route
-          path="/adminn/dashboard/menu"
+          path="/admin/dashboard/menu"
           element={
             <RoleProtectedRoute allowedRoles={["admin"]}>
               <AdminDashboard>
@@ -78,25 +78,25 @@ function App() {
           }
         />
         <Route
-          path="/adminn"
+          path="/admin"
           element={
             <RoleProtectedRoute allowedRoles={["admin"]}>
-              <Navigate to={"/adminn/dashboard/orders"} />
+              <Navigate to={"/admin/dashboard/orders"} />
             </RoleProtectedRoute>
           }
         />
 
         <Route
-          path="/adminn/dashboard"
+          path="/admin/dashboard"
           element={
             <RoleProtectedRoute allowedRoles={["admin"]}>
-              <Navigate to={"/adminn/dashboard/orders"} />
+              <Navigate to={"/admin/dashboard/orders"} />
             </RoleProtectedRoute>
           }
         />
 
         <Route
-          path="/adminn/dashboard/orders"
+          path="/admin/dashboard/orders"
           element={
             <RoleProtectedRoute allowedRoles={["admin"]}>
               <AdminDashboard>

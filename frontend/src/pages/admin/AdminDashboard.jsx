@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { logout } from "../../utils/auth";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import {
   Sidebar,
   SidebarProvider,
@@ -10,12 +10,9 @@ import {
   DialogOverlay,
   DialogContent,
 } from "@/components/ui/sidebar"; // Adjust the import path as needed
-import OrderDetails from "@/components/OrderDetails";
-import MenuDetails from "@/components/MenuDetails";
 // import Logo from '../../assets/images/logo-light.png';
 
-
-const AdminDashboard = ({children}) => {
+const AdminDashboard = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation(); // Hook to get the current URL
 
@@ -26,7 +23,7 @@ const AdminDashboard = ({children}) => {
   const handleLogout = () => {
     // debugger;
     logout();
-    navigate("/adminn/login");
+    navigate("/admin/login");
     closeDialog(); // Ensure dialog is closed on logout
   };
   useEffect(() => {
@@ -36,7 +33,6 @@ const AdminDashboard = ({children}) => {
       setActiveMenu("orders");
     }
   }, [location.pathname]); // Run whenever the URL changes
-
 
   const openDialog = () => setDialogOpen(true);
   const closeDialog = () => setDialogOpen(false);
@@ -52,25 +48,39 @@ const AdminDashboard = ({children}) => {
           {/* Company Logo and Name */}
           <div className="px-5 py-4 border-b mb-4">
             <div>
-              <img className="h-[64px]" src={'/logo-light.png'} alt="Daily Dose" />
+              <img
+                className="h-[64px]"
+                src={"/logo-light.png"}
+                alt="Daily Dose"
+              />
             </div>
           </div>
 
           {/* Navigation Menu */}
           <ul className="flex-1 overflow-y-auto px-3">
-            <li
-              className={`px-3 py-2 rounded cursor-pointer ${
-                activeMenu === "menu" ? "bg-primary text-white hover:text-white" : "hover:text-primary"
-              }`}
-            >
-              <Link to={'/adminn/dashboard/menu'}>Menu</Link> 
+            <li>
+              <Link
+                className={`px-3 py-2 rounded cursor-pointer ${
+                  activeMenu === "menu"
+                    ? "bg-primary text-white hover:text-white"
+                    : "hover:text-primary"
+                }`}
+                to={"/admin/dashboard/menu"}
+              >
+                Menu
+              </Link>
             </li>
-            <li
-              className={`px-3 py-2 rounded cursor-pointer ${
-                activeMenu === "orders" ? "bg-primary text-white hover:text-white" : "hover:text-primary"
-              }`}
-            >
-              <Link to={'/adminn/dashboard/orders'}>Orders</Link> 
+            <li>
+              <Link
+                className={`px-3 py-2 rounded cursor-pointer ${
+                  activeMenu === "orders"
+                    ? "bg-primary text-white hover:text-white"
+                    : "hover:text-primary"
+                }`}
+                to={"/admin/dashboard/orders"}
+              >
+                Orders
+              </Link>
             </li>
           </ul>
 
@@ -80,8 +90,19 @@ const AdminDashboard = ({children}) => {
               onClick={openDialog}
               className="w-full py-2 text-md rounded-lg text-red-500 border border-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center gap-3 p-4"
             >
-              <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 1C2.44771 1 2 1.44772 2 2V13C2 13.5523 2.44772 14 3 14H10.5C10.7761 14 11 13.7761 11 13.5C11 13.2239 10.7761 13 10.5 13H3V2L10.5 2C10.7761 2 11 1.77614 11 1.5C11 1.22386 10.7761 1 10.5 1H3ZM12.6036 4.89645C12.4083 4.70118 12.0917 4.70118 11.8964 4.89645C11.7012 5.09171 11.7012 5.40829 11.8964 5.60355L13.2929 7H6.5C6.22386 7 6 7.22386 6 7.5C6 7.77614 6.22386 8 6.5 8H13.2929L11.8964 9.39645C11.7012 9.59171 11.7012 9.90829 11.8964 10.1036C12.0917 10.2988 12.4083 10.2988 12.6036 10.1036L14.8536 7.85355C15.0488 7.65829 15.0488 7.34171 14.8536 7.14645L12.6036 4.89645Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 15 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 1C2.44771 1 2 1.44772 2 2V13C2 13.5523 2.44772 14 3 14H10.5C10.7761 14 11 13.7761 11 13.5C11 13.2239 10.7761 13 10.5 13H3V2L10.5 2C10.7761 2 11 1.77614 11 1.5C11 1.22386 10.7761 1 10.5 1H3ZM12.6036 4.89645C12.4083 4.70118 12.0917 4.70118 11.8964 4.89645C11.7012 5.09171 11.7012 5.40829 11.8964 5.60355L13.2929 7H6.5C6.22386 7 6 7.22386 6 7.5C6 7.77614 6.22386 8 6.5 8H13.2929L11.8964 9.39645C11.7012 9.59171 11.7012 9.90829 11.8964 10.1036C12.0917 10.2988 12.4083 10.2988 12.6036 10.1036L14.8536 7.85355C15.0488 7.65829 15.0488 7.34171 14.8536 7.14645L12.6036 4.89645Z"
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                ></path>
               </svg>
               Logout
             </button>

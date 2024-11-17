@@ -59,7 +59,7 @@ const AdminLogin = () => {
             variant: "default",
           });
           login(resp.token,'admin');
-          navigate("/admin");
+          navigate("/admin/dashboard/orders");
         })
         .catch((err) => {
           console.error(err);

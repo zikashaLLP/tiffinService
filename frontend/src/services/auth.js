@@ -1,9 +1,10 @@
 import axios from "axios";
 
-
 const url = import.meta.env.VITE_API_URL;
+// console.log(url);
 
 export const loginService = async (login) => {
+  console.log(url);
   return axios
     .post(url + "/api/admin/login", login)
     .then((response) => {

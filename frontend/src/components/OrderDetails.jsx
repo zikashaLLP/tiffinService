@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 import {
   CalendarIcon,
@@ -40,7 +40,11 @@ import { Label } from "./ui/label";
 import { assignOrder, getDeliveryBoys, getOrders } from "@/services/admin";
 import { useToast } from "@/hooks/use-toast";
 import DeliveryBoyCard from "./DeliveryBoyCard";
-import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover";
 import { Calendar } from "./ui/calendar";
 
 function OrderDetails() {
@@ -70,13 +74,16 @@ function OrderDetails() {
     params.shift = "Lunch";
     params.isorder = true;
     // console.log(params);
-    if (params.status === '') {
-      delete params.status;
-  }
-  setIsLoading(true);
+    params.status = "pending";
+    if (params.status === "") {
+      // delete params.status;
+    }
+    setSearchParams(params);
+    setIsLoading(true);
     getOrders(params)
       .then((res) => {
         // console.log(res.data);
+
         setOrders(res.orders);
         setcurrentItems(
           res.orders.slice(
@@ -93,14 +100,21 @@ function OrderDetails() {
             title: "Uh oh! Something went wrong.",
             description: err.response.data.message,
           });
-        else {
+        else if (err.response.status === 401) {
+          toast({
+            variant: "destructive",
+            title: "Invalid Token",
+            description: err.response.data.message,
+          });
+        } else {
           toast({
             variant: "destructive",
             title: "Uh oh! Something went wrong.",
             // description: err.response.data.message,
           });
         }
-      }).finally(()=>{
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   }, [flag]);
@@ -115,57 +129,51 @@ function OrderDetails() {
   }, []);
 
   useEffect(() => {
-    const dateParam = searchParams.get("date");
+    // Extract query parameters from the URL
+    const dateParam = searchParams.get("orderdate");
+    const deliveryDateParam = searchParams.get("deliverydate");
     const shiftParam = searchParams.get("shift");
     const statusParam = searchParams.get("status");
+    const isOrderParam = searchParams.get("isorder");
 
-    // Set default date to today's date if not present in the URL
+    // Update state with the extracted query parameters
     setDate(dateParam ? new Date(dateParam) : new Date());
-    setShift(shiftParam || "Lunch"); // Default to "lunch"
+    setShift(shiftParam || "Lunch");
     setStatus(statusParam || "");
+    setIsOrder(isOrderParam === "true");
 
-    const params = {};
-    params.orderdate = new Date().toISOString().slice(0, 10);
-    params.deliverydate = new Date().toISOString().slice(0, 10);
-    params.shift = "Lunch";
-    params.isorder = isOrder;
-    console.log(params);
-    if (params.status === '') {
-      delete params.status;
-  }
-  setIsLoading(true);
+    // Prepare params for the API call
+    const params = {
+      orderdate: dateParam || new Date().toISOString().slice(0, 10),
+      deliverydate: deliveryDateParam || new Date().toISOString().slice(0, 10),
+      shift: shiftParam || "Lunch",
+      status: statusParam !== "all" ? statusParam : undefined,
+      isorder: isOrderParam === "true",
+    };
+
+    if (!params.status) {
+      delete params.status; // Remove status filter if it's empty or not needed
+    }
+
+    setIsLoading(true);
+
+    // Fetch orders based on query params
     getOrders(params)
       .then((res) => {
-        // console.log(res.data);
         setOrders(res.orders);
-        setcurrentItems(
-          res.orders.slice(
-            (currentPage - 1) * itemsPerPage,
-            currentPage * itemsPerPage
-          )
-        );
+        setcurrentItems(sliceItems(res.orders, currentPage, itemsPerPage));
       })
       .catch((err) => {
-        // console.log(err);
-        if (err.response.status === 404)
-          toast({
-            variant: "warning",
-            title: "Uh oh! Something went wrong.",
-            description: err.response.data.message,
-          });
-        else {
-          toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            // description: err.response.data.message,
-          });
-        }
-      }).finally(()=>{
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: err.response?.data?.message || "Failed to fetch orders.",
+        });
+      })
+      .finally(() => {
         setIsLoading(false);
-      });;
-
-    // console.log(searchParams);
-  }, [searchParams]);
+      });
+  }, [searchParams]); // Run whenever searchParams changes
 
   const applyFilters = () => {
     const params = {
@@ -181,10 +189,11 @@ function OrderDetails() {
     };
 
     // console.log("Applying filters with params:", params);
-    if (params.status === '') {
+    if (params.status === "") {
       delete params.status;
-  }
-  setIsLoading(true);
+    }
+    setSearchParams(params);
+    setIsLoading(true);
     getOrders(params)
       .then((res) => {
         console.log("Orders fetched:", res.orders);
@@ -202,9 +211,10 @@ function OrderDetails() {
         setOrders([]);
         setCurrentPage(1); // Reset to first page if filters change
         setcurrentItems([]);
-      }).finally(()=>{
+      })
+      .finally(() => {
         setIsLoading(false);
-      });;
+      });
   };
 
   function sliceItems(items, page, perPage) {
@@ -300,23 +310,22 @@ function OrderDetails() {
   };
 
   const statusFormat = {
-    pending:'Pending',
-    isAssigned:'Assigned',
-    outForDelivery:'Out for delivery',
-    done:'Delivered',
-    unexpected:'Cancelled'
-  }
+    pending: "Pending",
+    isAssigned: "Assigned",
+    outForDelivery: "Out for delivery",
+    done: "Delivered",
+    unexpected: "Cancelled",
+  };
 
   console.log(date, shift, status, isOrder);
-  
 
   return (
     <div className="container mx-auto p-10 h-screen overflow-auto">
       {isLoading && (
-      <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-        <div className="loader"></div>
-      </div>
-    )}
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="loader"></div>
+        </div>
+      )}
       <h1 className="text-2xl font-bold mb-4">Order Details</h1>
 
       {/* Filters UI here */}
@@ -327,10 +336,10 @@ function OrderDetails() {
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center space-x-2">
               <span>Delivery</span>
-              <Switch 
+              <Switch
                 id="group-by-address"
                 checked={isOrder}
-                onCheckedChange={() => handleToggleDeliveryOrder(!isOrder)} 
+                onCheckedChange={() => handleToggleDeliveryOrder(!isOrder)}
               />
               <span>Order</span>
             </div>
@@ -370,7 +379,10 @@ function OrderDetails() {
                     <SelectItem value="Lunch" className="hover:bg-gray-100 p-2">
                       Lunch
                     </SelectItem>
-                    <SelectItem value="Dinner" className="hover:bg-gray-100 p-2">
+                    <SelectItem
+                      value="Dinner"
+                      className="hover:bg-gray-100 p-2"
+                    >
                       Dinner
                     </SelectItem>
                   </SelectContent>
@@ -419,13 +431,14 @@ function OrderDetails() {
             {/* Group by Address Toggle */}
             <div className="flex items-center space-x-2">
               <Label htmlFor="group-by-address">Group by Address</Label>
-              <Switch 
+              <Switch
                 id="group-by-address"
                 checked={isGroupedByAddress}
-                onCheckedChange={() => handleToggleGroupByAddress(!isGroupedByAddress)} 
+                onCheckedChange={() =>
+                  handleToggleGroupByAddress(!isGroupedByAddress)
+                }
               />
             </div>
-
           </div>
           {/* Apply Filters Button */}
           <Button
@@ -500,6 +513,7 @@ function OrderDetails() {
               <TableHead as="th">Order Date</TableHead>
               <TableHead as="th">Delivery Date</TableHead>
               <TableHead as="th">Status</TableHead>
+              <TableHead as="th">Assigned To</TableHead>
               <TableHead as="th">Shift</TableHead>
               <TableHead as="th">Total Amount</TableHead>
             </TableRow>
@@ -508,14 +522,14 @@ function OrderDetails() {
             {currentItems.map((order) => (
               <TableRow key={order.id}>
                 <TableCell>
-                  {order.status === "pending" ? (
+                  {['pending','isAssigned'].includes(order.status) ? (
                     <Checkbox
                       checked={selectedRows.includes(order.id)}
                       onCheckedChange={() => handleRowSelection(order.id)}
                     />
                   ) : (
                     <span className="icon">
-                      {order.status === "isAssigned" && <UserCheck />}
+                      {/* {order.status === "isAssigned" && <UserCheck />} */}
                       {order.status === "outForDelivery" && <Truck />}
                       {order.status === "done" && <CheckCircle />}
                       {order.status === "unexpected" && <AlertTriangle />}
@@ -531,6 +545,9 @@ function OrderDetails() {
                   {new Date(order.deliveryDate).toLocaleDateString()}
                 </TableCell>
                 <TableCell>{statusFormat[order.status]}</TableCell>
+                <TableCell>{
+                  order.status!='pending' ? <span>{order.deliveryBoy.fullName }</span>: '-'
+                  }</TableCell>
                 <TableCell>{order.shift}</TableCell>
                 <TableCell>₹ {(+order.totalAmount).toFixed(2)}</TableCell>
               </TableRow>
@@ -563,7 +580,10 @@ function OrderDetails() {
 
           <div className="flex items-center gap-2">
             <span className="whitespace-nowrap">Rows per page</span>
-            <Select value={itemsPerPage.toString()} onValueChange={(value) => setItemsPerPage(parseInt(value))}>
+            <Select
+              value={itemsPerPage.toString()}
+              onValueChange={(value) => setItemsPerPage(parseInt(value))}
+            >
               <SelectTrigger className="w-[70px] bg-white">
                 <SelectValue />
               </SelectTrigger>
@@ -616,19 +636,45 @@ function OrderDetails() {
 
           {/* Pagination buttons */}
           <div className="flex gap-1">
-            <Button className="bg-white" variant="outline" size="icon" onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>
+            <Button
+              className="bg-white"
+              variant="outline"
+              size="icon"
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+            >
               <span className="sr-only">First page</span>
               <ChevronFirstIcon className="h-4 w-4" />
             </Button>
-            <Button className="bg-white" variant="outline" size="icon" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+            <Button
+              className="bg-white"
+              variant="outline"
+              size="icon"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
               <span className="sr-only">Previous page</span>
               <ChevronLeftIcon className="h-4 w-4" />
             </Button>
-            <Button className="bg-white" variant="outline" size="icon" onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+            <Button
+              className="bg-white"
+              variant="outline"
+              size="icon"
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+            >
               <span className="sr-only">Next page</span>
               <ChevronRightIcon className="h-4 w-4" />
             </Button>
-            <Button className="bg-white" variant="outline" size="icon" onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>
+            <Button
+              className="bg-white"
+              variant="outline"
+              size="icon"
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+            >
               <span className="sr-only">Last page</span>
               <ChevronLastIcon className="h-4 w-4" />
             </Button>

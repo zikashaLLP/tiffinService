@@ -20,7 +20,7 @@ const Checkout = () => {
   const { toast } = useToast();
   const location = useLocation();
   const cart = location.state?.cart;
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const [addresses, setAddresses] = useState([]);
 
@@ -67,9 +67,15 @@ const Checkout = () => {
   const validateForm = () => {
     const newErrors = {};
 
+    // Validate address
     if (!form.address_id) newErrors.address_id = "Please select an address.";
-    if (!form.mobile_no || !/^\d{10}$/.test(form.mobile_no)) {
-      newErrors.mobile_no = "Please enter a valid 10-digit mobile number.";
+
+    // Validate mobile number
+    if (!form.mobile_no) {
+      newErrors.mobile_no = "Please enter a mobile number.";
+    } else if (!/^[6-9]\d{9}$/.test(form.mobile_no)) {
+      newErrors.mobile_no =
+        "Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.";
     }
 
     setErrors(newErrors);
@@ -81,43 +87,49 @@ const Checkout = () => {
     e.preventDefault();
     if (validateForm()) {
       // console.log("Order Data:", form);
-      setIsLoading(true)
-      const orderData = { ...form, menus:cart };
+      setIsLoading(true);
+      const orderData = { ...form, menus: cart };
       // console.log("Submitting Order:", orderData);
       addOrder(orderData)
         .then((resp) => {
           console.log(resp);
           const order = resp.order;
-          const {id, mobile_no, totalAmount} = order;
-          const paymentInfo = {orderId:id,amount:totalAmount,mobileNumber:mobile_no}
+          const { id, mobile_no, totalAmount } = order;
+          const paymentInfo = {
+            orderId: id,
+            amount: totalAmount,
+            mobileNumber: mobile_no,
+          };
           initiatePayment(paymentInfo)
-          .then((resp)=>{
-            console.log(resp);
-            const {url} = resp.data;
-            window.location.href = url;
-          })
-          .catch((err)=>{
-            console.log(err);
-            toast({
-              title: "Payment Error",
-              description: "Failed to initiate payment.",
-              variant: "destructive",
+            .then((resp) => {
+              console.log(resp);
+              const { url } = resp.data;
+              window.location.href = url;
+            })
+            .catch((err) => {
+              console.log(err);
+              toast({
+                title: "Payment Error",
+                description: "Failed to initiate payment.",
+                variant: "destructive",
+              });
+            })
+            .finally(() => {
+              setIsLoading(false);
             });
-          }).finally(()=>{
-            setIsLoading(false)
-          })
           // toast({
           //   title: "Order Submitted",
           //   description: "Your order has been placed successfully.",
           //   variant: "success",
           // });
-          
+
           // navigate("/")
         })
         .catch((err) => {
           console.log(err);
-        }).finally(()=>{
-          setIsLoading(false)
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
 
       // navigate("/confirmation"); // Navigate to confirmation page
@@ -138,7 +150,9 @@ const Checkout = () => {
         </div>
       )}
       {/* <Header/> */}
-      <h2 className="text-2xl font-bold mb-2 text-center p-8 mt-8 ">Checkout</h2>
+      <h2 className="text-2xl font-bold mb-2 text-center p-8 mt-8 ">
+        Checkout
+      </h2>
       <form
         onSubmit={handleSubmit}
         className="max-w-lg mx-auto bg-white p-6 shadow-lg border rounded-lg"

@@ -1,25 +1,32 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
-
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminLogin from './pages/admin/AdminLogin';
-import Checkout from './pages/Checkout';
-import MyOrders from './pages/MyOrders';
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLogin from "./pages/admin/AdminLogin";
+import Checkout from "./pages/Checkout";
+import MyOrders from "./pages/MyOrders";
 
 // Import components
-import GlobalToastContainer from './components/GlobalToastContainer';
-import { isLoggedIn, isRole } from './utils/auth';
-import RoleProtectedRoute from './components/ProtectedRoute';
-import DeliveryLogin from './pages/delivery/DeliveryLogin';
-import DeliveryDashboard from './pages/delivery/DeliveryDashboard';
-import PaymentStatus from './pages/PaymentStatus';
-import Home from './pages/Home';
-import Menu from './pages/Menu';
-import About from './pages/About';
-import ContactPage from './pages/ContactPage';
+import GlobalToastContainer from "./components/GlobalToastContainer";
+import { isLoggedIn, isRole } from "./utils/auth";
+import RoleProtectedRoute from "./components/ProtectedRoute";
+import DeliveryLogin from "./pages/delivery/DeliveryLogin";
+import DeliveryDashboard from "./pages/delivery/DeliveryDashboard";
+import PaymentStatus from "./pages/PaymentStatus";
+import Home from "./pages/Home";
+import Menu from "./pages/Menu";
+import About from "./pages/About";
+import ContactPage from "./pages/ContactPage";
+import MenuDetails from "./components/MenuDetails";
+import OrderDetails from "./components/OrderDetails";
 
 function App() {
+  // console.log(import.meta.env);
   return (
     <Router>
       <Routes>
@@ -29,21 +36,72 @@ function App() {
         <Route path="/about-us" element={<About />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/payment-status/:transactionId" element={<PaymentStatus />} />
+        <Route
+          path="/payment-status/:transactionId"
+          element={<PaymentStatus />}
+        />
         <Route path="/my-orders" element={<MyOrders />} />
 
         {/* Admin Login Route */}
-        <Route path="/admin/login" element={isLoggedIn() && isRole('admin') ? <Navigate to="/admin" /> : <AdminLogin />} />
+        <Route
+          path="/admin/login"
+          element={
+            isLoggedIn() && isRole("admin") ? (
+              <Navigate to="/admin" />
+            ) : (
+              <AdminLogin />
+            )
+          }
+        />
 
         {/* Delivery Login Route */}
-        <Route path="/delivery/login" element={isLoggedIn() && isRole('delivery') ? <Navigate to="/delivery" /> : <DeliveryLogin />} />
+        <Route
+          path="/delivery/login"
+          element={
+            isLoggedIn() && isRole("delivery") ? (
+              <Navigate to="/delivery" />
+            ) : (
+              <DeliveryLogin />
+            )
+          }
+        />
 
         {/* Protected Admin Dashboard Route */}
         <Route
+          path="/admin/dashboard/menu"
+          element={
+            <RoleProtectedRoute allowedRoles={["admin"]}>
+              <AdminDashboard>
+                <MenuDetails />
+              </AdminDashboard>
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
           path="/admin"
           element={
-            <RoleProtectedRoute allowedRoles={['admin']}>
-              <AdminDashboard />
+            <RoleProtectedRoute allowedRoles={["admin"]}>
+              <Navigate to={"/admin/dashboard/orders"} />
+            </RoleProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/dashboard"
+          element={
+            <RoleProtectedRoute allowedRoles={["admin"]}>
+              <Navigate to={"/admin/dashboard/orders"} />
+            </RoleProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/dashboard/orders"
+          element={
+            <RoleProtectedRoute allowedRoles={["admin"]}>
+              <AdminDashboard>
+                <OrderDetails />
+              </AdminDashboard>
             </RoleProtectedRoute>
           }
         />
@@ -52,7 +110,7 @@ function App() {
         <Route
           path="/delivery"
           element={
-            <RoleProtectedRoute allowedRoles={['delivery']}>
+            <RoleProtectedRoute allowedRoles={["delivery"]}>
               <DeliveryDashboard />
             </RoleProtectedRoute>
           }

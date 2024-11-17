@@ -25,7 +25,7 @@ export const getOrders = async (mobile, params) => {
     });
 };
 
-export const markAsDelivered = async (orderId) => {
+export const markAsDelivered = async (orderId, updatedStatus) => {
     const t = localStorage.getItem("token");
     const config = {
       headers: {
@@ -35,7 +35,7 @@ export const markAsDelivered = async (orderId) => {
       }
     };
     return axios
-      .put(url + `/api/deliveryboy/order/status`,{orderId, status:'done'}, config)
+      .put(url + `/api/deliveryboy/order/status`,{orderId, status:updatedStatus}, config)
       .then((response) => {
         // Handle successful response
         return response.data; // Return data if needed

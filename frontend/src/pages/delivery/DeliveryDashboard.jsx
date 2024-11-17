@@ -24,7 +24,7 @@ const summarizeVariants = (menus) => {
   const summary = {};
   menus.forEach((menu) => {
     const variant = `${menu.quantity} x ${menu.variant}`;
-    summary[variant] = (summary[variant] || '') ;
+    summary[variant] = summary[variant] || "";
   });
   return Object.keys(summary)
     .map((key) => `${summary[key]} ${key}`)
@@ -32,51 +32,77 @@ const summarizeVariants = (menus) => {
 };
 
 const OrderCard = ({ order, type, onDeliver }) => {
-    // Currency formatting for Indian Rupees
-    const formatCurrency = (amount) => new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 2
+  const formatCurrency = (amount) =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 2,
     }).format(amount);
-  
-    return (
-      <div className="border p-4 mb-4 relative rounded shadow bg-white text-gray-800">
-        <h2 className="font-bold text-lg">Order Details #{order.id.toString().padStart(4, '0')}</h2>
-        <div className="flex justify-between items-center">
-          <p><strong>Date:</strong> {formatDate(order.orderDate)}</p>
-          <p className="font-medium text-sm text-gray-500">{formatTime(order.orderDate)}</p>
-        </div>
-        <p><strong>Customer Mobile:</strong> {order.mobile_no}</p>
-        <p><strong>Variants:</strong> {summarizeVariants(order.menus)}</p>
-        <p><strong>Total Amount:</strong> {formatCurrency(order.totalAmount)}</p>
-        {type === 1 && (
-          <button 
-            onClick={() => onDeliver(order.id)}
-            className="mt-2 bg-classic-grey text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-150 ease-in-out">
-            Mark as Delivered
-          </button>
-        )}
-        {order.status ==='done' && <span className=" absolute bottom-3 right-3 text-green-500 font-semibold">Delivered</span>}
-        {order.status ==='isAssigned' && <span className=" absolute bottom-3 right-3 text-red-500 font-semibold">Pending</span>}
-      </div>
-    );
-  };
-  
+
+  const nextAction =
+    order.status === "isAssigned"
+      ? { label: "Mark as Out for Delivery", nextStatus: true }
+      : { label: "Mark as Completed", nextStatus: false };
+
+  return (
+    <div className="border p-4 mb-4 relative rounded shadow bg-white text-gray-800">
+      <h2 className="font-bold text-lg">
+        Order #{order.id.toString().padStart(4, "0")}
+      </h2>
+      <p>
+        <strong>Date:</strong> {formatDate(order.orderDate)}
+      </p>
+      <p>
+        <strong>Customer Mobile:</strong> {order.mobile_no}
+      </p>
+      <p>
+        <strong>Variants:</strong> {summarizeVariants(order.menus)}
+      </p>
+      <p>
+        <strong>Total Amount:</strong> {formatCurrency(order.totalAmount)}
+      </p>
+
+      {order.status !== "done" && (
+        <button
+          onClick={() => onDeliver(order.id, nextAction.nextStatus)}
+          className="mt-2 bg-classic-grey text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-150 ease-in-out"
+        >
+          {nextAction.label}
+        </button>
+      )}
+
+      {order.status === "done" && (
+        <span className="absolute bottom-3 right-3 text-green-500 font-semibold">
+          Delivered
+        </span>
+      )}
+      {order.status === "isAssigned" && (
+        <span className="absolute bottom-3 right-3 text-red-500 font-semibold">
+          Pending
+        </span>
+      )}
+      {order.status === "outForDelivery" && (
+        <span className="absolute bottom-3 right-3 text-blue-500 font-semibold">
+          Out for Delivery
+        </span>
+      )}
+    </div>
+  );
+};
 
 const DeliveryDashboard = () => {
-    const navigate = useNavigate();
-    const { toast } = useToast();
-    const [activeTab, setActiveTab] = useState("pending");
-    const [date, setDate] = useState(new Date());
-    const [shift, setShift] = useState("Lunch");
-    const [isLoading, setIsLoading] = useState(false);
-    const [isDialogOpen, setDialogOpen] = useState(false);
-    const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-    const [selectedOrderId, setSelectedOrderId] = useState(null);
-    const [orders, setOrders] = useState([]);
-    const [mobile, setMobile] = useState(localStorage.getItem('mobile'));
-
-
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("pending");
+  const [date, setDate] = useState(new Date());
+  const [shift, setShift] = useState("Lunch");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [mobile, setMobile] = useState(localStorage.getItem("mobile"));
+  const [del, setDel] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -97,7 +123,6 @@ const DeliveryDashboard = () => {
     }
   }, []);
 
-  
   const openDialog = () => setDialogOpen(true);
   const closeDialog = () => setDialogOpen(false);
 
@@ -112,40 +137,52 @@ const DeliveryDashboard = () => {
       date: date.toISOString().split("T")[0],
       shift,
     };
-    console.log(params);
+
     getOrders(mobile, params)
-      .then((resp) => setOrders(resp.data))
+      .then((resp) => {
+        const allOrders = resp.data;
+        setOrders(allOrders);
+      })
       .catch((err) => {
         toast({
           title: "Error fetching orders",
           description: err.response?.data?.message || "Network error",
           variant: "destructive",
         });
-        if(err.response.status===404)
-        setOrders([])
+        if (err.response?.status === 404) setOrders([]);
       })
       .finally(() => setIsLoading(false));
   };
 
-  const handleDeliver = (orderId) => {
+  const handleDeliver = (orderId, nextStatus) => {
     setSelectedOrderId(orderId);
+    setDel(nextStatus); // Determines the next status transition
     setConfirmDialogOpen(true);
   };
+  const filteredOrders = orders.filter((order) => {
+    if (activeTab === "pending") return order.status === "isAssigned";
+    if (activeTab === "outForDelivery")
+      return order.status === "outForDelivery";
+    if (activeTab === "completed") return order.status === "done";
+    return false;
+  });
 
   const confirmDelivery = () => {
     setIsLoading(true);
-    markAsDelivered(selectedOrderId)
+    const updatedStatus = del ? "outForDelivery" : "done"; // Logic to determine next status
+
+    markAsDelivered(selectedOrderId, updatedStatus)
       .then(() => {
         toast({
-          title: "Delivery Confirmed",
-          description: "The order status has been updated to delivered.",
+          title: "Delivery Status Updated",
+          description: `Order has been marked as ${updatedStatus}.`,
           variant: "positive",
         });
-        applyFilters(); // Re-fetch or update orders list locally
+        applyFilters(); // Refresh orders
       })
       .catch((err) => {
         toast({
-          title: "Error updating order",
+          title: "Error updating status",
           description: err.response?.data?.message || "Network error",
           variant: "destructive",
         });
@@ -183,9 +220,27 @@ const DeliveryDashboard = () => {
           onClick={() => setActiveTab("pending")}
         >
           Pending
-          {orders.filter(order => order.status === "isAssigned").length > 0 && (
+          {orders.filter((order) => order.status === "isAssigned").length >
+            0 && (
             <span className="absolute top-0 right-0 mr-2 mt-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
-              {orders.filter(order => order.status === "isAssigned").length}
+              {orders.filter((order) => order.status === "isAssigned").length}
+            </span>
+          )}
+        </button>
+        <button
+          className={`flex-1 relative text-center p-2 font-semibold ${
+            activeTab === "outForDelivery" ? "bg-classic-grey text-white" : ""
+          }`}
+          onClick={() => setActiveTab("outForDelivery")}
+        >
+          Out For Delivery
+          {orders.filter((order) => order.status === "outForDelivery").length >
+            0 && (
+            <span className="absolute top-0 right-0 mr-2 mt-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+              {
+                orders.filter((order) => order.status === "outForDelivery")
+                  .length
+              }
             </span>
           )}
         </button>
@@ -243,24 +298,28 @@ const DeliveryDashboard = () => {
         ) : (
           <p>Completed orders will be listed here.</p>
         )} */}
-        {orders.filter(o=>o.status === (activeTab==='pending'?'isAssigned':'done')).map((order) => (
+        {filteredOrders.map((order) => (
           <OrderCard
             key={order.id}
             order={order}
-            type={activeTab === "pending" ? 1 : 2}
-            onDeliver={handleDeliver}
+            type={
+              activeTab === "pending"
+                ? 1
+                : activeTab === "outForDelivery"
+                ? 2
+                : 3
+            }
+            onDeliver={() =>
+              handleDeliver(order.id, activeTab === "pending" ? true : false)
+            }
           />
         ))}
-        {
-            activeTab==='pending' && orders.filter(o=>o.status === 'isAssigned').length === 0 && (
-                <p className="text-center text-gray-500">No pending orders</p>
-            )
-        }
-        {
-            activeTab==='completed' && orders.filter(o=>o.status === 'done').length === 0 && (
-                <p className="text-center text-gray-500">No completed orders</p>
-            )
-        }
+
+        <div className="text-center text-gray-500">
+          {activeTab === "pending" && "No pending orders"}
+          {activeTab === "outForDelivery" && "No orders out for delivery"}
+          {activeTab === "completed" && "No completed orders"}
+        </div>
       </div>
 
       {/* Logout Confirmation Dialog */}
@@ -294,12 +353,20 @@ const DeliveryDashboard = () => {
           <DialogOverlay className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" />
           <DialogContent className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full z-50">
             <h2 className="text-xl font-semibold mb-4">Confirm Delivery</h2>
-            <p className="mb-6">Are you sure you want to mark this order as delivered?</p>
+            <p className="mb-6">
+              Are you sure you want to mark this order as delivered?
+            </p>
             <div className="flex justify-end">
-              <button onClick={confirmDelivery} className="bg-classic-grey text-white p-2 rounded mr-2 hover:bg-classic-grey">
+              <button
+                onClick={confirmDelivery}
+                className="bg-classic-grey text-white p-2 rounded mr-2 hover:bg-classic-grey"
+              >
                 Confirm
               </button>
-              <button onClick={() => setConfirmDialogOpen(false)} className="bg-gray-300 text-black p-2 rounded hover:bg-gray-400">
+              <button
+                onClick={() => setConfirmDialogOpen(false)}
+                className="bg-gray-300 text-black p-2 rounded hover:bg-gray-400"
+              >
                 Cancel
               </button>
             </div>

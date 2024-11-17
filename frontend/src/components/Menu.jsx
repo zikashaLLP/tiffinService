@@ -114,7 +114,9 @@ export default function Menu({ menu, date, setFlag }) {
     // console.log(date.toISOString());
     const newMenu = {
       id: Date.now().toString(),
-      date: new Date(date.getTime() + 5.5 * 60 * 60 * 1000).toISOString().split("T")[0],
+      date: new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0],
       isPublished: true,
       shift: selectedShift,
       variant: "",
@@ -135,10 +137,10 @@ export default function Menu({ menu, date, setFlag }) {
 
   const handleDiscardChanges = () => {
     setEditingMenuId(null);
-    if(selectedShift=='Lunch'){
-    setLunchData(l=>l.filter(k=>k.id!==editingMenuId))
-    }else{
-    setDinnerData(l=>l.filter(k=>k.id!==editingMenuId))
+    if (selectedShift == "Lunch") {
+      setLunchData((l) => l.filter((k) => k.id !== editingMenuId));
+    } else {
+      setDinnerData((l) => l.filter((k) => k.id !== editingMenuId));
     }
     // setMenuData(menu.length > 0 ? menu : []);
     setErrors({});
@@ -232,27 +234,21 @@ export default function Menu({ menu, date, setFlag }) {
                 </div>
                 <div className="flex-1">
                   <Label>Variant</Label>
-                  <Select
+                  <Input
+                    placeholder="Enter Variant"
                     value={lunchData[menuIndex].variant}
-                    onValueChange={(value) =>
-                      handleInputChange(menuIndex, "variant", value)
+                    onChange={(e) =>
+                      handleInputChange(menuIndex, "variant", e.target.value)
                     }
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Variant" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      <SelectItem value="Full-Dish">Full-Dish</SelectItem>
-                      <SelectItem value="Half-Dish">Half-Dish</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    className="w-full p-2 border rounded"
+                  />
                   {errors.variant && (
                     <p className="text-red-500 text-sm">{errors.variant}</p>
                   )}
                 </div>
               </div>
 
-              <div>  
+              <div>
                 <Label>Description</Label>
                 <textarea
                   placeholder="Description"
@@ -428,20 +424,14 @@ export default function Menu({ menu, date, setFlag }) {
                 </div>
                 <div className="flex-1">
                   <Label>Variant</Label>
-                  <Select
+                  <Input
+                    placeholder="Enter Variant"
                     value={dinnerData[menuIndex].variant}
-                    onValueChange={(value) =>
-                      handleInputChange(menuIndex, "variant", value)
+                    onChange={(e) =>
+                      handleInputChange(menuIndex, "variant", e.target.value)
                     }
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Variant" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Full-Dish">Full-Dish</SelectItem>
-                      <SelectItem value="Half-Dish">Half-Dish</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    className="w-full p-2 border rounded"
+                  />
                   {errors.variant && (
                     <p className="text-red-500 text-sm">{errors.variant}</p>
                   )}
@@ -698,7 +688,7 @@ export default function Menu({ menu, date, setFlag }) {
         )}
       <div className="w-full flex justify-center">
         <Button
-          variant={'ghost'}
+          variant={"ghost"}
           className="w-full max-w-3xl bg-primary text-white mt-4 mb-8"
           onClick={handleAddMenu}
           disabled={editingMenuId !== null} // Disable when in edit mode

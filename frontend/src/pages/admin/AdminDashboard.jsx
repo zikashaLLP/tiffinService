@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { logout } from "../../utils/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarProvider,
@@ -14,8 +14,10 @@ import MenuDetails from "@/components/MenuDetails";
 import Logo from '../../assets/images/logo-light.png';
 
 
-const AdminDashboard = () => {
+const AdminDashboard = ({children}) => {
   const navigate = useNavigate();
+  const location = useLocation(); // Hook to get the current URL
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeMenu, setActiveMenu] = useState("menu");
   const [isDialogOpen, setDialogOpen] = useState(false); // State to control dialog visibility
@@ -26,6 +28,14 @@ const AdminDashboard = () => {
     navigate("/admin/login");
     closeDialog(); // Ensure dialog is closed on logout
   };
+  useEffect(() => {
+    if (location.pathname.includes("/menu")) {
+      setActiveMenu("menu");
+    } else if (location.pathname.includes("/orders")) {
+      setActiveMenu("orders");
+    }
+  }, [location.pathname]); // Run whenever the URL changes
+
 
   const openDialog = () => setDialogOpen(true);
   const closeDialog = () => setDialogOpen(false);
@@ -51,17 +61,15 @@ const AdminDashboard = () => {
               className={`px-3 py-2 rounded cursor-pointer ${
                 activeMenu === "menu" ? "bg-primary text-white hover:text-white" : "hover:text-primary"
               }`}
-              onClick={() => setActiveMenu("menu")}
             >
-              Menu
+              <Link to={'/admin/dashboard/menu'}>Menu</Link> 
             </li>
             <li
               className={`px-3 py-2 rounded cursor-pointer ${
                 activeMenu === "orders" ? "bg-primary text-white hover:text-white" : "hover:text-primary"
               }`}
-              onClick={() => setActiveMenu("orders")}
             >
-              Orders
+              <Link to={'/admin/dashboard/orders'}>Orders</Link> 
             </li>
           </ul>
 
@@ -79,9 +87,10 @@ const AdminDashboard = () => {
           </SidebarFooter>
         </div>
 
-        {/* Main Content Area */}
+        {/* Main Content Area
         {activeMenu === "menu" && <MenuDetails />}
-        {activeMenu === "orders" && <OrderDetails />}
+        {activeMenu === "orders" && <OrderDetails />} */}
+        {children}
 
         {/* Confirmation Dialog */}
         {isDialogOpen && (

@@ -60,7 +60,7 @@ const AdminDashboard = ({ children }) => {
           <ul className="flex-1 overflow-y-auto px-3">
             <li>
               <Link
-                className={`px-3 py-2 rounded cursor-pointer ${
+                className={` block px-3 py-2 rounded cursor-pointer ${
                   activeMenu === "menu"
                     ? "bg-primary text-white hover:text-white"
                     : "hover:text-primary"
@@ -72,7 +72,7 @@ const AdminDashboard = ({ children }) => {
             </li>
             <li>
               <Link
-                className={`px-3 py-2 rounded cursor-pointer ${
+                className={` block px-3 py-2 rounded cursor-pointer ${
                   activeMenu === "orders"
                     ? "bg-primary text-white hover:text-white"
                     : "hover:text-primary"

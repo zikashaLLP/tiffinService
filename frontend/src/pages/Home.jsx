@@ -3,7 +3,7 @@ import Footer from './Footer';
 import SpecialDish from '@/components/SpecialDish';
 import SpecialDishSection from '@/components/SpecialDishSection';
 import Working from '@/components/Working';
-
+import { Link } from 'react-router-dom';
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">

@@ -78,7 +78,7 @@ function OrderDetails() {
     if (params.status === "") {
       // delete params.status;
     }
-    setSearchParams(params);
+    // setSearchParams(params);
     setIsLoading(true);
     getOrders(params)
       .then((res) => {
@@ -192,7 +192,7 @@ function OrderDetails() {
     if (params.status === "") {
       delete params.status;
     }
-    setSearchParams(params);
+    // setSearchParams(params);
     setIsLoading(true);
     getOrders(params)
       .then((res) => {

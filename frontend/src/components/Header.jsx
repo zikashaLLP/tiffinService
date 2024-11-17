@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react"; // Icons from lucide-react
-import UnderlineIcon from '../assets/images/underline.png';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +24,7 @@ export default function Header() {
         </button>
         <nav className={`${menuClass} md:flex md:items-center md:space-x-6 md:bg-transparent`}>
           <ul
-            style={{'--underline-img-url': `url(${UnderlineIcon})`}}
+            style={{'--underline-img-url': `url('/underline.png')`}}
             className={`md:flex md:flex-row md:space-x-6 md:items-center text-white md:text-gray-400 text-lg p-10 md:p-0 space-y-4 md:space-y-0`}
           >
             <li>

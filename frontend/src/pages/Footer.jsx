@@ -2,7 +2,6 @@ import React from "react";
 import { FaFacebookF, FaTwitter, FaInstagram, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import LogoDark from "../assets/images/logo-dark.png";
 
 export default function Footer() {
   const navigate = useNavigate();
@@ -12,7 +11,7 @@ export default function Footer() {
       <div className="container">
         <div className="flex flex-col gap-6 md:flex-row justify-between items-center md:items-start">
           <div className="flex items-center space-x-4">
-            <img onClick={() => navigate("/")} role="button" src={LogoDark} className="h-12" alt="Daily Dose Logo" />
+            <img onClick={() => navigate("/")} role="button" src={'/logo-dark.png'} className="h-12" alt="Daily Dose Logo" />
           </div>
           <div className=" flex flex-col justify-center items-center gap-8">
             <div className="flex space-x-10">

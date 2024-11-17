@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/sidebar"; // Adjust the import path as needed
 import OrderDetails from "@/components/OrderDetails";
 import MenuDetails from "@/components/MenuDetails";
-import Logo from '../../assets/images/logo-light.png';
+// import Logo from '../../assets/images/logo-light.png';
 
 
 const AdminDashboard = ({children}) => {
@@ -51,7 +51,7 @@ const AdminDashboard = ({children}) => {
           {/* Company Logo and Name */}
           <div className="px-5 py-4 border-b mb-4">
             <div>
-              <img className="h-[64px]" src={Logo} alt="Daily Dose" />
+              <img className="h-[64px]" src={'/logo-light.png'} alt="Daily Dose" />
             </div>
           </div>
 

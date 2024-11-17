@@ -3,8 +3,6 @@ import Footer from './Footer';
 import SpecialDish from '@/components/SpecialDish';
 import SpecialDishSection from '@/components/SpecialDishSection';
 import Working from '@/components/Working';
-import { Link } from 'react-router-dom';
-import BannerImg from '../assets/images/banner.png'
 
 export default function Home() {
   return (
@@ -19,7 +17,7 @@ export default function Home() {
         </div>
         <SpecialDishSection className=""/>
 
-        <div style={{background: `url(${BannerImg})`, backgroundSize: 'cover'}} className="container rounded-xl my-20">
+        <div style={{background: `url('/banner.png')`, backgroundSize: 'cover'}} className="container rounded-xl my-20">
           <div className="p-20">
             <h1 className="text-white text-4xl mb-3">The fastest</h1>
             <h1 className="text-white text-5xl font-semibold mb-3">Delivery <span className="text-primary">Food</span></h1>

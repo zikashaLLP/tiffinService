@@ -25,7 +25,7 @@ const AdminDashboard = ({children}) => {
   const handleLogout = () => {
     // debugger;
     logout();
-    navigate("/admin/login");
+    navigate("/adminn/login");
     closeDialog(); // Ensure dialog is closed on logout
   };
   useEffect(() => {
@@ -62,14 +62,14 @@ const AdminDashboard = ({children}) => {
                 activeMenu === "menu" ? "bg-primary text-white hover:text-white" : "hover:text-primary"
               }`}
             >
-              <Link to={'/admin/dashboard/menu'}>Menu</Link> 
+              <Link to={'/adminn/dashboard/menu'}>Menu</Link> 
             </li>
             <li
               className={`px-3 py-2 rounded cursor-pointer ${
                 activeMenu === "orders" ? "bg-primary text-white hover:text-white" : "hover:text-primary"
               }`}
             >
-              <Link to={'/admin/dashboard/orders'}>Orders</Link> 
+              <Link to={'/adminn/dashboard/orders'}>Orders</Link> 
             </li>
           </ul>
 
